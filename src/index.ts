@@ -133,7 +133,7 @@ app.post(
             "https://([a-zA-Z0-9_-]+.)+[a-zA-Z0-9_-]+(/[a-zA-Z0-9_-]+)*/?$";
         const checkHttpLinkRegex = new RegExp(regExpString);
 
-        if (youtubeUrl.match(checkHttpLinkRegex)) {
+        if (!youtubeUrl.match(checkHttpLinkRegex)) {
             res.status(400).send(
                 setErrors([
                     {
@@ -142,8 +142,11 @@ app.post(
                     },
                 ])
             );
-            return;
+            console.log("Yo");
+
+            // return;
         }
+        console.log("Yo 2");
         const newBlogger = { id: +new Date(), name, youtubeUrl };
         mockBloggers.push(newBlogger);
         res.status(200).send(newBlogger);

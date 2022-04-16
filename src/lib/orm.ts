@@ -1,5 +1,5 @@
 import { Db, Filter, UpdateFilter, WithId } from "mongodb";
-import { Post } from "../respositories/postsRepository";
+import { IPost } from "../entity/Post";
 
 type TFilter<T = any> = {
     withArchived?: boolean;

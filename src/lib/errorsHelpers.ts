@@ -46,7 +46,7 @@ export class ValidationErrors {
     ) {
         const errors: ValidationErrorClass[] = await validate(instance, {
             skipNullProperties: true,
-            skipUndefinedProperties: true,
+            // skipUndefinedProperties: true,
             ...(validatorOptions ? validatorOptions : {}),
         });
 
@@ -54,10 +54,12 @@ export class ValidationErrors {
             const result = await Promise.all(
                 errors
                     .map((e) =>
-                        Object.entries(e.constraints!).map(([key, value]) => ({
-                            field: key,
-                            message: value,
-                        }))
+                        Object.entries(e.constraints ?? []).map(
+                            ([key, value]) => ({
+                                field: e.property,
+                                message: value,
+                            })
+                        )
                     )
                     .flat(1)
             );

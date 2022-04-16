@@ -1,17 +1,14 @@
-import {
-    Post,
-    PostInput,
-    postsRepository,
-} from "../respositories/postsRepository";
+import { postsRepository } from "../respositories/postsRepository";
+import { IPost, PostInput } from "../entity/Post";
 
 export const postsService = {
-    async findPosts(): Promise<Post[]> {
+    async findPosts(): Promise<IPost[]> {
         return postsRepository.getPosts();
     },
-    async findPostById(id: number): Promise<Post | null> {
+    async findPostById(id: number): Promise<IPost | null> {
         return postsRepository.getPostById(id);
     },
-    async createPost(post: PostInput): Promise<Post | null> {
+    async createPost(post: PostInput): Promise<IPost | null> {
         const newPostInput: Required<PostInput> = {
             ...post,
             id: +new Date(),
@@ -19,10 +16,10 @@ export const postsService = {
 
         return postsRepository.createPost(newPostInput);
     },
-    async updatePost(post: Required<PostInput>): Promise<Post | null> {
+    async updatePost(post: Required<PostInput>): Promise<IPost | null> {
         return postsRepository.updatePost(post);
     },
-    async deletePost(id: Post["id"]): Promise<boolean> {
+    async deletePost(id: IPost["id"]): Promise<boolean> {
         return postsRepository.deletePostById(id);
     },
 };

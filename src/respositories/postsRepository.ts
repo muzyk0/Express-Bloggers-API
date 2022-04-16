@@ -1,35 +1,24 @@
 import { db } from "../domain/db";
+import { IBlogger } from "../entity/Blogger";
 import { EntityManager } from "../lib/orm";
-import { Blogger } from "./bloggersRepository";
+import { IPost, PostInput } from "../entity/Post";
 
-export interface Post {
-    id: number;
-    title: string;
-    shortDescription: string;
-    content: string;
-    bloggerId: Blogger["id"];
-    bloggerName: Blogger["name"];
-}
-
-export type PostInput = Partial<Pick<Post, "id">> &
-    Pick<Post, "title" | "content" | "shortDescription" | "bloggerId">;
-
-const postsCollection = db.collection<Post>("posts");
+const postsCollection = db.collection<IPost>("posts");
 
 const m = new EntityManager(db);
 
 export const postsRepository = {
-    async getPosts(withArchived: boolean = false): Promise<Post[]> {
+    async getPosts(withArchived: boolean = false): Promise<IPost[]> {
         return m.find("posts", { withArchived });
     },
     async getPostById(
         id: number,
         withArchived: boolean = false
-    ): Promise<Post | null> {
+    ): Promise<IPost | null> {
         return m.findOne("posts", { withArchived, id });
     },
-    async createPost(post: Required<PostInput>): Promise<Post | null> {
-        const blogger = await m.findOne<Blogger>("bloggers", {
+    async createPost(post: Required<PostInput>): Promise<IPost | null> {
+        const blogger = await m.findOne<IBlogger>("bloggers", {
             id: post.bloggerId,
         });
 
@@ -37,7 +26,7 @@ export const postsRepository = {
             return null;
         }
 
-        const newPost: Post = {
+        const newPost: IPost = {
             ...post,
             bloggerName: blogger?.name,
         };
@@ -52,8 +41,10 @@ export const postsRepository = {
         bloggerId,
         content,
         shortDescription,
-    }: Required<PostInput>): Promise<Post | null> {
-        const blogger = await m.findOne<Blogger>("bloggers", { id: bloggerId });
+    }: Required<PostInput>): Promise<IPost | null> {
+        const blogger = await m.findOne<IBlogger>("bloggers", {
+            id: bloggerId,
+        });
 
         if (!blogger) {
             return null;
@@ -75,7 +66,7 @@ export const postsRepository = {
 
         return modifyPost.value;
     },
-    async deletePostById(id: Post["id"]): Promise<boolean> {
+    async deletePostById(id: IPost["id"]): Promise<boolean> {
         const result = await m.deleteOne("posts", { id });
 
         return result;

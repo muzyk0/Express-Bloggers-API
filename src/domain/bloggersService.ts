@@ -1,17 +1,15 @@
-import {
-    Blogger,
-    bloggersRepository,
-} from "../respositories/bloggersRepository";
+import { IBlogger } from "../entity/Blogger";
+import { bloggersRepository } from "../respositories/bloggersRepository";
 
 export const bloggersService = {
-    async findBloggers(): Promise<Blogger[]> {
+    async findBloggers(): Promise<IBlogger[]> {
         return bloggersRepository.getBloggers();
     },
-    async findBloggerById(id: number): Promise<Blogger | null> {
+    async findBloggerById(id: number): Promise<IBlogger | null> {
         return bloggersRepository.getBloggerById(id);
     },
-    async createBlogger(name: string, youtubeUrl: string): Promise<Blogger> {
-        const newBlogger: Blogger = {
+    async createBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
+        const newBlogger: IBlogger = {
             id: +new Date(),
             name,
             youtubeUrl,
@@ -21,8 +19,8 @@ export const bloggersService = {
     },
     async updateBlogger(
         id: number,
-        blogger: Pick<Blogger, "name" | "youtubeUrl">
-    ): Promise<Blogger | null> {
+        blogger: Pick<IBlogger, "name" | "youtubeUrl">
+    ): Promise<IBlogger | null> {
         return bloggersRepository.updateBlogger(id, blogger);
     },
     async deleteBlogger(

@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import { postsService } from "../domain/postsService";
 import { setErrors } from "../lib/errorsHelpers";
+import { bloggersService } from "../domain/bloggersService";
+import { Post } from "../entity/Post";
 
 export const postsRoute = express.Router();
 
@@ -12,26 +14,27 @@ postsRoute
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
 
-        if (isNaN(id) || id <= 0) {
-            res.status(400).send(
-                setErrors([
-                    {
-                        field: "id",
-                        message: `In URI params cannot be empty`,
-                    },
-                ])
-            );
-            return;
+        {
+            const postValidation = new Post();
+
+            postValidation.id = id;
+
+            const errors = await Post.validate(postValidation);
+
+            if (errors) {
+                res.status(400).send(errors);
+                return;
+            }
         }
 
         const post = await postsService.findPostById(id);
 
         if (!post) {
-            res.status(400).send(
+            res.status(404).send(
                 setErrors([
                     {
                         field: "",
-                        message: `Blogger doesn't exist`,
+                        message: `Post doesn't exist`,
                     },
                 ])
             );
@@ -56,48 +59,30 @@ postsRoute
         ) => {
             const { title, bloggerId, content, shortDescription } = req.body;
 
-            if (title.length <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "title",
-                            message: `The field cannot be empty`,
-                        },
-                    ])
-                );
-                return;
+            {
+                const postValidation = new Post();
+
+                postValidation.title = title;
+                postValidation.bloggerId = bloggerId;
+                postValidation.content = content;
+                postValidation.shortDescription = shortDescription;
+
+                const errors = await Post.validate(postValidation);
+
+                if (errors) {
+                    res.status(400).send(errors);
+                    return;
+                }
             }
 
-            if (bloggerId <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "bloggerId",
-                            message: `The field cannot be not number`,
-                        },
-                    ])
-                );
-                return;
-            }
+            const blogger = await bloggersService.findBloggerById(bloggerId);
 
-            if (typeof content !== "string") {
+            if (!blogger) {
                 res.status(400).send(
                     setErrors([
                         {
-                            field: "content",
-                            message: `The field cannot be not string`,
-                        },
-                    ])
-                );
-                return;
-            }
-
-            if (typeof shortDescription !== "string") {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "shortDescription",
-                            message: `The field cannot be not string`,
+                            field: "",
+                            message: `Post not found`,
                         },
                     ])
                 );
@@ -116,14 +101,14 @@ postsRoute
                     setErrors([
                         {
                             field: "",
-                            message: `Blogger doesn't exist`,
+                            message: `Post isn't created`,
                         },
                     ])
                 );
                 return;
             }
 
-            res.status(200).send(newPost);
+            res.status(201).send(newPost);
         }
     )
 
@@ -145,62 +130,24 @@ postsRoute
             const { title, bloggerId, content, shortDescription } = req.body;
             const id = parseInt(req.params.id);
 
-            if (isNaN(id) || id <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "id",
-                            message: `In URI params cannot be empty`,
-                        },
-                    ])
-                );
-                return;
+            {
+                const postValidation = new Post();
+
+                postValidation.id = id;
+                postValidation.title = title;
+                postValidation.bloggerId = bloggerId;
+                postValidation.content = content;
+                postValidation.shortDescription = shortDescription;
+
+                const errors = await Post.validate(postValidation);
+
+                if (errors) {
+                    res.status(400).send(errors);
+                    return;
+                }
             }
 
-            if (title.length <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "title",
-                            message: `The field cannot be empty`,
-                        },
-                    ])
-                );
-                return;
-            }
-            if (bloggerId <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "bloggerId",
-                            message: `The field cannot be not number`,
-                        },
-                    ])
-                );
-                return;
-            }
-            if (typeof content !== "string") {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "content",
-                            message: `The field cannot be not string`,
-                        },
-                    ])
-                );
-                return;
-            }
-            if (typeof shortDescription !== "string") {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "shortDescription",
-                            message: `The field cannot be not string`,
-                        },
-                    ])
-                );
-                return;
-            }
+            const blogger = await bloggersService.findBloggerById(id);
 
             const post = await postsService.updatePost({
                 id,
@@ -211,43 +158,44 @@ postsRoute
             });
 
             if (!post) {
-                res.status(400).send(
+                res.status(404).send(
                     setErrors([
                         {
                             field: "",
-                            message: `Blogger doesn't exist`,
+                            message: `Post doesn't updated`,
                         },
                     ])
                 );
                 return;
             }
 
-            res.status(200).send(post);
+            res.status(204).send(post);
         }
     )
     .delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
 
-        if (isNaN(id) || id <= 0) {
-            res.status(400).send(
-                setErrors([
-                    {
-                        field: "id",
-                        message: `In URI params cannot be empty`,
-                    },
-                ])
-            );
-            return;
+        {
+            const postValidation = new Post();
+
+            postValidation.id = id;
+
+            const errors = await Post.validate(postValidation);
+
+            if (errors) {
+                res.status(400).send(errors);
+                return;
+            }
         }
 
         const isDeleted = await postsService.deletePost(id);
 
         if (!isDeleted) {
-            res.status(400).send(
+            res.status(404).send(
                 setErrors([
                     {
                         field: "",
-                        message: `Blogger doesn't exist`,
+                        message: `Post doesn't deleted`,
                     },
                 ])
             );

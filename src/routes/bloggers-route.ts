@@ -2,8 +2,8 @@ import { validate, ValidationError } from "class-validator";
 import express, { Request, Response } from "express";
 import { MONGO_URI } from "../constants";
 import { bloggersService } from "../domain/bloggersService";
+import { Blogger } from "../entity/Blogger";
 import { ErrorMessage, setErrors } from "../lib/errorsHelpers";
-import { Blogger } from "../respositories/bloggersRepository";
 
 export const bloggersRouter = express.Router();
 
@@ -29,7 +29,7 @@ bloggersRouter
         const blogger = await bloggersService.findBloggerById(id);
 
         if (!blogger) {
-            res.status(400).send(
+            res.status(404).send(
                 setErrors([
                     {
                         field: "",
@@ -104,7 +104,7 @@ bloggersRouter
             });
 
             if (!blogger) {
-                res.status(400).send(
+                res.status(404).send(
                     setErrors([
                         {
                             field: "",
@@ -115,7 +115,7 @@ bloggersRouter
                 return;
             }
 
-            res.status(200).send(blogger);
+            res.sendStatus(204);
         }
     )
     .delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
@@ -134,24 +134,12 @@ bloggersRouter
             }
         }
 
-        if (isNaN(id) || id <= 0) {
-            res.status(400).send(
-                setErrors([
-                    {
-                        field: "id",
-                        message: `In URI params cannot be empty`,
-                    },
-                ])
-            );
-            return;
-        }
-
         const bloggerIsDeleted = await bloggersService.deleteBlogger(id, {
             softRemove: true,
         });
 
         if (!bloggerIsDeleted) {
-            res.status(400).send(
+            res.status(404).send(
                 setErrors([
                     {
                         field: "",

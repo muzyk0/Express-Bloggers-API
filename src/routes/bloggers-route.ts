@@ -1,7 +1,9 @@
+import { validate, ValidationError } from "class-validator";
 import express, { Request, Response } from "express";
 import { MONGO_URI } from "../constants";
 import { bloggersService } from "../domain/bloggersService";
-import { setErrors } from "../lib/errorsHelpers";
+import { ErrorMessage, setErrors } from "../lib/errorsHelpers";
+import { Blogger } from "../respositories/bloggersRepository";
 
 export const bloggersRouter = express.Router();
 
@@ -13,15 +15,14 @@ bloggersRouter
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
 
-        if (isNaN(id) || id <= 0) {
-            res.status(400).send(
-                setErrors([
-                    {
-                        field: "id",
-                        message: `In URI params cannot be empty`,
-                    },
-                ])
-            );
+        const bloggerForValidation = new Blogger();
+
+        bloggerForValidation.id = id;
+
+        const errors = await Blogger.validate(bloggerForValidation);
+
+        if (errors) {
+            res.status(400).send(errors);
             return;
         }
 
@@ -49,44 +50,15 @@ bloggersRouter
         ) => {
             const { name, youtubeUrl } = req.body;
 
-            if (name.length <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "name",
-                            message: `The field cannot be empty`,
-                        },
-                    ])
-                );
-                return;
-            }
+            let blogger = new Blogger();
 
-            if (youtubeUrl.length <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "youtubeUrl",
-                            message: `The field cannot be empty`,
-                        },
-                    ])
-                );
-                return;
-            }
+            blogger.name = name;
+            blogger.youtubeUrl = youtubeUrl;
 
-            const regExpString =
-                /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;
+            const errors = await Blogger.validate(blogger);
 
-            const checkHttpLinkRegex = new RegExp(regExpString);
-
-            if (!youtubeUrl.match(checkHttpLinkRegex)) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "youtubeUrl",
-                            message: `The field must match the regular expression ${regExpString}`,
-                        },
-                    ])
-                );
+            if (errors) {
+                res.status(400).send(errors);
                 return;
             }
 
@@ -111,28 +83,19 @@ bloggersRouter
             const { name, youtubeUrl } = req.body;
             const id = parseInt(req.params.id);
 
-            if (name.length <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "name",
-                            message: `The field cannot be empty`,
-                        },
-                    ])
-                );
-                return;
-            }
+            {
+                let blogger = new Blogger();
 
-            if (youtubeUrl.length <= 0) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "youtubeUrl",
-                            message: `The field cannot be empty`,
-                        },
-                    ])
-                );
-                return;
+                blogger.id = id;
+                blogger.name = name;
+                blogger.youtubeUrl = youtubeUrl;
+
+                const errors = await Blogger.validate(blogger);
+
+                if (errors) {
+                    res.status(400).send(errors);
+                    return;
+                }
             }
 
             const blogger = await bloggersService.updateBlogger(id, {
@@ -157,6 +120,19 @@ bloggersRouter
     )
     .delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
+
+        {
+            let blogger = new Blogger();
+
+            blogger.id = id;
+
+            const errors = await Blogger.validate(blogger);
+
+            if (errors) {
+                res.status(400).send(errors);
+                return;
+            }
+        }
 
         if (isNaN(id) || id <= 0) {
             res.status(400).send(

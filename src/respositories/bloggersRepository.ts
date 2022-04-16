@@ -1,9 +1,25 @@
+import { IsInt, Length, Matches } from "class-validator";
 import { db } from "../domain/db";
+import { ValidationErrors } from "../lib/errorsHelpers";
 import { EntityManager } from "../lib/orm";
 
-export interface Blogger {
+// export interface Blogger {
+//     id: number;
+//     name: string;
+//     youtubeUrl: string;
+// }
+
+const youtubeURLPattern = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;
+
+export class Blogger extends ValidationErrors {
+    @IsInt()
     id: number;
+
+    @Length(1)
     name: string;
+
+    @Length(1)
+    @Matches(youtubeURLPattern)
     youtubeUrl: string;
 }
 

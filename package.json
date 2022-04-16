@@ -17,6 +17,7 @@
     "description": "Simple RestAPI server without DB",
     "dependencies": {
         "body-parser": "^1.19.2",
+        "class-validator": "^0.13.2",
         "concurrently": "^7.0.0",
         "cors": "^2.8.5",
         "dotenv": "^16.0.0",

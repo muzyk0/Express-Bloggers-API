@@ -38,6 +38,7 @@ postsRoute
                     },
                 ])
             );
+            return;
         }
 
         res.status(200).send(post);
@@ -75,40 +76,38 @@ postsRoute
                 }
             }
 
-            const blogger = await bloggersService.findBloggerById(bloggerId);
+            try {
+                const newPost = await postsService.createPost({
+                    title,
+                    bloggerId,
+                    content,
+                    shortDescription,
+                });
 
-            if (!blogger) {
+                if (!newPost) {
+                    res.status(400).send(
+                        setErrors([
+                            {
+                                field: "",
+                                message: `Post doesn't created`,
+                            },
+                        ])
+                    );
+                    return;
+                }
+
+                res.status(201).send(newPost);
+            } catch (error) {
                 res.status(400).send(
                     setErrors([
                         {
                             field: "",
-                            message: `Post not found`,
+                            message: (error as Error).message,
                         },
                     ])
                 );
                 return;
             }
-
-            const newPost = await postsService.createPost({
-                title,
-                bloggerId,
-                content,
-                shortDescription,
-            });
-
-            if (!newPost) {
-                res.status(400).send(
-                    setErrors([
-                        {
-                            field: "",
-                            message: `Post isn't created`,
-                        },
-                    ])
-                );
-                return;
-            }
-
-            res.status(201).send(newPost);
         }
     )
 
@@ -147,33 +146,45 @@ postsRoute
                 }
             }
 
-            const blogger = await bloggersService.findBloggerById(id);
+            try {
+                const post = await postsService.updatePost({
+                    id,
+                    title,
+                    shortDescription,
+                    bloggerId,
+                    content,
+                });
 
-            const post = await postsService.updatePost({
-                id,
-                title,
-                shortDescription,
-                bloggerId,
-                content,
-            });
+                if (!post) {
+                    res.status(404).send(
+                        setErrors([
+                            {
+                                field: "",
+                                message: `Post doesn't updated`,
+                            },
+                        ])
+                    );
+                    return;
+                }
 
-            if (!post) {
-                res.status(404).send(
+                res.status(204).send(post);
+            } catch (error) {
+                res.status(400).send(
                     setErrors([
                         {
                             field: "",
-                            message: `Post doesn't updated`,
+                            message: (error as Error).message,
                         },
                     ])
                 );
                 return;
             }
-
-            res.status(204).send(post);
         }
     )
     .delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
+
+        console.log("id: ", id);
 
         {
             const postValidation = new Post();
@@ -189,6 +200,8 @@ postsRoute
         }
 
         const isDeleted = await postsService.deletePost(id);
+
+        console.log("isDeleted: ", isDeleted);
 
         if (!isDeleted) {
             res.status(404).send(

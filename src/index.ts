@@ -13,15 +13,21 @@ const PORT = process.env.PORT ?? 5000;
  */
 const BASE_URL = "";
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+(async () => {
+    try {
+        const app = express();
+        app.use(cors());
+        app.use(express.json());
 
-app.use(CheckBodyIsEmpty);
-app.use(`${BASE_URL}/bloggers`, bloggersRouter);
-app.use(`${BASE_URL}/posts`, postsRoute);
+        app.use(CheckBodyIsEmpty);
+        app.use(`${BASE_URL}/bloggers`, bloggersRouter);
+        app.use(`${BASE_URL}/posts`, postsRoute);
 
-app.listen(PORT, async () => {
-    await runDB();
-    console.log(`Example app listening on port ${PORT}`);
-});
+        app.listen(PORT, async () => {
+            await runDB();
+            console.log(`Example app listening on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+})();

@@ -11,10 +11,10 @@ const PORT = process.env.PORT ?? 5000;
  * This is base URL for API.
  * @use "/api"
  */
-const BASE_URL = "";
+const BASE_URL = process.env.BASE_URL ?? "";
 
-(async () => {
-    try {
+try {
+    (async () => {
         const app = express();
         app.use(cors());
         app.use(express.json());
@@ -27,7 +27,7 @@ const BASE_URL = "";
             await runDB();
             console.log(`Example app listening on port ${PORT}`);
         });
-    } catch (error) {
-        console.error(error);
-    }
-})();
+    })();
+} catch (error) {
+    console.error(error);
+}

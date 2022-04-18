@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express";
 import { postsService } from "../domain/postsService";
-import { setErrors } from "../lib/errorsHelpers";
-import { bloggersService } from "../domain/bloggersService";
 import { Post } from "../entity/Post";
+import { setErrors } from "../lib/errorsHelpers";
 
 export const postsRoute = express.Router();
 

@@ -1,7 +1,7 @@
+import { OptionalId } from "mongodb";
 import { db } from "../domain/db";
-import { IBlogger } from "../entity/Blogger";
+import { IPost } from "../entity/Post";
 import { EntityManager } from "../lib/orm";
-import { IPost, PostInput } from "../entity/Post";
 
 const postsCollection = db.collection<IPost>("posts");
 
@@ -17,49 +17,16 @@ export const postsRepository = {
     ): Promise<IPost | null> {
         return m.findOne("posts", { withArchived, id });
     },
-    async createPost(post: Required<PostInput>): Promise<IPost | null> {
-        const blogger = await m.findOne<IBlogger>("bloggers", {
-            id: post.bloggerId,
-        });
+    async createPost(post: OptionalId<IPost>): Promise<IPost | null> {
+        await postsCollection.insertOne(post);
 
-        if (!blogger) {
-            return null;
-        }
-
-        const newPost: IPost = {
-            ...post,
-            bloggerName: blogger?.name,
-        };
-
-        await postsCollection.insertOne(newPost);
-
-        return newPost;
+        return post;
     },
-    async updatePost({
-        id,
-        title,
-        bloggerId,
-        content,
-        shortDescription,
-    }: Required<PostInput>): Promise<IPost | null> {
-        const blogger = await m.findOne<IBlogger>("bloggers", {
-            id: bloggerId,
-        });
-
-        if (!blogger) {
-            return null;
-        }
-
+    async updatePost(post: IPost): Promise<IPost | null> {
         const modifyPost = await postsCollection.findOneAndUpdate(
-            { id },
+            { id: post.id },
             {
-                $set: {
-                    title,
-                    bloggerId,
-                    content,
-                    shortDescription,
-                    bloggerName: blogger.name,
-                },
+                $set: post,
             },
             { returnDocument: "after" }
         );

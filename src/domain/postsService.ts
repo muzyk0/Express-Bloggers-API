@@ -1,5 +1,5 @@
-import { postsRepository } from "../respositories/postsRepository";
 import { IPost, PostInput } from "../entity/Post";
+import { postsRepository } from "../respositories/postsRepository";
 import { bloggersService } from "./bloggersService";
 
 export const postsService = {
@@ -16,8 +16,9 @@ export const postsService = {
             throw new Error("Blogger doesn't exist");
         }
 
-        const newPostInput: Required<PostInput> = {
+        const newPostInput: IPost = {
             ...post,
+            bloggerName: blogger.name,
             id: +new Date(),
         };
 
@@ -30,7 +31,12 @@ export const postsService = {
             throw new Error("Blogger doesn't exist");
         }
 
-        return postsRepository.updatePost(post);
+        const newPost: IPost = {
+            ...post,
+            bloggerName: blogger.name,
+        };
+
+        return postsRepository.updatePost(newPost);
     },
     async deletePost(id: IPost["id"]): Promise<boolean> {
         return postsRepository.deletePostById(id);

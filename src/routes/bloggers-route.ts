@@ -1,9 +1,7 @@
-import { validate, ValidationError } from "class-validator";
 import express, { Request, Response } from "express";
-import { MONGO_URI } from "../constants";
 import { bloggersService } from "../domain/bloggersService";
 import { Blogger } from "../entity/Blogger";
-import { ErrorMessage, setErrors } from "../lib/errorsHelpers";
+import { setErrors } from "../lib/errorsHelpers";
 
 export const bloggersRouter = express.Router();
 

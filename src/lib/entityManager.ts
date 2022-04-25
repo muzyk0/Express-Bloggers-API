@@ -46,10 +46,9 @@ export class EntityManager {
 
         return {
             pagesCount: totalPagesCount,
-            pageNumber:
-                totalPagesCount > pageNumber ? pageNumber + 1 : totalPagesCount,
-            pageSize: pageSize,
-            totalCount: totalCount,
+            pageNumber,
+            pageSize,
+            totalCount,
             items: result as C[],
         };
     }

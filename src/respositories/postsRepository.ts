@@ -14,7 +14,12 @@ export const postsRepository = {
         {
             searchNameTerm,
             bloggerId,
-        }: { searchNameTerm?: string; bloggerId?: number },
+            withArchived,
+        }: {
+            searchNameTerm?: string;
+            bloggerId?: number;
+            withArchived?: boolean;
+        },
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<IPost>> {
         return m.find(
@@ -24,6 +29,7 @@ export const postsRepository = {
                     ? { title: { $regex: searchNameTerm } }
                     : {}),
                 ...(bloggerId ? { bloggerId } : {}),
+                withArchived,
             },
             paginatorOptions
         );
@@ -51,7 +57,7 @@ export const postsRepository = {
         return modifyPost.value;
     },
     async deletePostById(id: IPost["id"]): Promise<boolean> {
-        const result = await m.deleteOne("posts", { id });
+        const result = await m.deleteOne("posts", { id, softRemove: true });
 
         return result;
     },

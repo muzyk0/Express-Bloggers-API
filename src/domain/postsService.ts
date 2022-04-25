@@ -12,7 +12,7 @@ export const postsService = {
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<IPost>> {
         return postsRepository.getPosts(
-            { searchNameTerm, bloggerId },
+            { searchNameTerm, bloggerId, withArchived: false },
             paginatorOptions
         );
     },

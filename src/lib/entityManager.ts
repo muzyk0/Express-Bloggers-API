@@ -3,6 +3,7 @@ import { PaginatorOptions, ResponseDataWithPaginator } from "./Paginator";
 
 export type TFilter<T = any> = {
     withArchived?: boolean;
+    softRemove?: boolean;
 } & Filter<T>;
 
 type TCollection = "bloggers" | "posts";
@@ -12,7 +13,7 @@ export class EntityManager {
 
     async find<C = any>(
         collection: TCollection,
-        { withArchived = true, ...options }: TFilter,
+        { withArchived = false, ...options }: TFilter,
         { pageNumber, pageSize }: PaginatorOptions = {
             pageNumber: 1,
             pageSize: 10,
@@ -21,7 +22,7 @@ export class EntityManager {
         const filter = {
             ...(options as Filter<C>),
 
-            ...(options?.withArchived ? {} : { deleted: { $exists: false } }),
+            ...(withArchived ? {} : { deleted: { $exists: false } }),
         };
 
         const totalCount = await this.bd
@@ -54,7 +55,7 @@ export class EntityManager {
     }
     async findOne<C = any>(
         collection: TCollection,
-        { withArchived = false, ...options }: TFilter<any>
+        { withArchived = false, ...options }: TFilter
     ): Promise<WithId<C> | null> {
         return await this.bd.collection<C>(collection).findOne(
             {
@@ -70,9 +71,9 @@ export class EntityManager {
     }
     async deleteOne<C = any>(
         collection: TCollection,
-        { withArchived = false, ...options }: TFilter<any>
+        { withArchived = false, softRemove = true, ...options }: TFilter
     ): Promise<boolean> {
-        if (options?.softRemove) {
+        if (softRemove) {
             const result = await this.bd
                 .collection<C>(collection)
                 .updateOne(

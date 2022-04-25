@@ -1,5 +1,5 @@
 import { IsInt, Length, Matches } from "class-validator";
-import { ValidationErrors } from "../lib/errorsHelpers";
+import { ValidationErrors } from "../lib/ValidationErrors";
 import { Nullable } from "../types/genericTypes";
 
 export const youtubeURLPattern =

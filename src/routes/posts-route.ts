@@ -1,13 +1,30 @@
 import express, { Request, Response } from "express";
 import { postsService } from "../domain/postsService";
 import { Post } from "../entity/Post";
-import { setErrors } from "../lib/errorsHelpers";
+import { setErrors } from "../lib/ValidationErrors";
+import { Paginator } from "../lib/Paginator";
 
 export const postsRoute = express.Router();
 
 postsRoute
     .get("/", async (req: Request, res: Response) => {
-        const posts = await postsService.findPosts();
+        const paginatorValues = new Paginator(req.query);
+
+        const paginatorValidateErrors = await Paginator.validate(
+            paginatorValues
+        );
+
+        if (paginatorValidateErrors) {
+            return res.status(400).send(paginatorValidateErrors);
+        }
+
+        const posts = await postsService.findPosts(
+            { searchNameTerm: paginatorValues.searchNameTerm },
+            {
+                pageNumber: paginatorValues.pageNumber,
+                pageSize: paginatorValues.pageSize,
+            }
+        );
         res.status(200).send(posts);
     })
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {

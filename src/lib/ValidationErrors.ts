@@ -25,6 +25,9 @@ export const setErrors = (errors: ErrorMessage[]): IResponse => {
     };
 };
 
+/**
+ * Универсальный класс для валидации ошибок с использованием class-validator
+ */
 export class ValidationErrors {
     static setErrors: (errors: ErrorMessage[]) => IResponse;
 

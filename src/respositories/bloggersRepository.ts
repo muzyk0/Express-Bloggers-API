@@ -1,6 +1,8 @@
-import { db } from "../domain/db";
+import { db } from "./db";
 import { IBlogger } from "../entity/Blogger";
-import { EntityManager } from "../lib/orm";
+import { EntityManager } from "../lib/entityManager";
+import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
+import { Nullable } from "../types/genericTypes";
 
 // export interface Blogger {
 //     id: number;
@@ -18,8 +20,15 @@ export const bloggersRepository = {
     //         .find(withArchived ? {} : { deleted: { $exists: false } })
     //         .toArray();
     // },
-    async getBloggers(withArchived: boolean = false): Promise<IBlogger[]> {
-        return m.find<IBlogger>("bloggers", { withArchived });
+    async getBloggers(
+        { searchNameTerm }: { searchNameTerm: Nullable<string> },
+        paginatorOptions?: PaginatorOptions
+    ): Promise<ResponseDataWithPaginator<IBlogger>> {
+        return m.find<IBlogger>(
+            "bloggers",
+            searchNameTerm ? { title: { $regex: searchNameTerm } } : {},
+            paginatorOptions
+        );
     },
     // async getBloggerById(
     //     id: number,
@@ -37,7 +46,9 @@ export const bloggersRepository = {
         return m.findOne<IBlogger>("bloggers", { withArchived, id });
     },
     async createBlogger(blogger: IBlogger): Promise<IBlogger> {
-        await bloggersCollection.insertOne(blogger);
+        await bloggersCollection.insertOne(blogger, {
+            forceServerObjectId: true,
+        });
         return blogger;
     },
     async updateBlogger(

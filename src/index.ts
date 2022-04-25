@@ -2,7 +2,7 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import { CheckBodyIsEmpty } from "./middlewares/CheckBodyEmpty";
-import { runDB } from "./domain/db";
+import { runDB } from "./respositories/db";
 import { bloggersRouter } from "./routes/bloggers-route";
 import { postsRoute } from "./routes/posts-route";
 const PORT = process.env.PORT ?? 5000;

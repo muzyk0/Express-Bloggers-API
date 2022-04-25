@@ -1,15 +1,32 @@
 import { OptionalId } from "mongodb";
-import { db } from "../domain/db";
+import { db } from "./db";
 import { IPost } from "../entity/Post";
-import { EntityManager } from "../lib/orm";
+import { EntityManager, TFilter } from "../lib/entityManager";
+import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
+import { Nullable } from "../types/genericTypes";
 
 const postsCollection = db.collection<IPost>("posts");
 
 const m = new EntityManager(db);
 
 export const postsRepository = {
-    async getPosts(withArchived: boolean = false): Promise<IPost[]> {
-        return m.find("posts", { withArchived });
+    async getPosts(
+        {
+            searchNameTerm,
+            bloggerId,
+        }: { searchNameTerm?: string; bloggerId?: number },
+        paginatorOptions?: PaginatorOptions
+    ): Promise<ResponseDataWithPaginator<IPost>> {
+        return m.find(
+            "posts",
+            {
+                ...(searchNameTerm
+                    ? { title: { $regex: searchNameTerm } }
+                    : {}),
+                ...(bloggerId ? { bloggerId } : {}),
+            },
+            paginatorOptions
+        );
     },
     async getPostById(
         id: number,
@@ -18,7 +35,7 @@ export const postsRepository = {
         return m.findOne("posts", { withArchived, id });
     },
     async createPost(post: OptionalId<IPost>): Promise<IPost | null> {
-        await postsCollection.insertOne(post);
+        await postsCollection.insertOne(post, { forceServerObjectId: true });
 
         return post;
     },

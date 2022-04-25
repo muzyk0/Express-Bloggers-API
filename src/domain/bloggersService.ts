@@ -1,9 +1,16 @@
 import { IBlogger } from "../entity/Blogger";
+import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { bloggersRepository } from "../respositories/bloggersRepository";
 
 export const bloggersService = {
-    async findBloggers(): Promise<IBlogger[]> {
-        return bloggersRepository.getBloggers();
+    async findBloggers(
+        searchNameTerm?: string,
+        paginatorOptions?: PaginatorOptions
+    ): Promise<ResponseDataWithPaginator<IBlogger>> {
+        return bloggersRepository.getBloggers(
+            { searchNameTerm },
+            paginatorOptions
+        );
     },
     async findBloggerById(id: number): Promise<IBlogger | null> {
         return bloggersRepository.getBloggerById(id);

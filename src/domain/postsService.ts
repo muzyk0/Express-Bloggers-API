@@ -1,10 +1,20 @@
 import { IPost, PostInput } from "../entity/Post";
+import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { postsRepository } from "../respositories/postsRepository";
 import { bloggersService } from "./bloggersService";
 
 export const postsService = {
-    async findPosts(): Promise<IPost[]> {
-        return postsRepository.getPosts();
+    async findPosts(
+        {
+            searchNameTerm,
+            bloggerId,
+        }: { searchNameTerm?: string; bloggerId?: number },
+        paginatorOptions?: PaginatorOptions
+    ): Promise<ResponseDataWithPaginator<IPost>> {
+        return postsRepository.getPosts(
+            { searchNameTerm, bloggerId },
+            paginatorOptions
+        );
     },
     async findPostById(id: number): Promise<IPost | null> {
         return postsRepository.getPostById(id);

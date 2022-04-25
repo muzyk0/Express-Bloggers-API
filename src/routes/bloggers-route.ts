@@ -1,13 +1,32 @@
 import express, { Request, Response } from "express";
 import { bloggersService } from "../domain/bloggersService";
 import { Blogger } from "../entity/Blogger";
-import { setErrors } from "../lib/errorsHelpers";
+import { setErrors } from "../lib/ValidationErrors";
+import { Paginator } from "../lib/Paginator";
+import { postsService } from "../domain/postsService";
+import { Post } from "../entity/Post";
 
 export const bloggersRouter = express.Router();
 
 bloggersRouter
     .get(`/`, async (req: Request, res: Response) => {
-        const bloggers = await bloggersService.findBloggers();
+        const paginatorValues = new Paginator(req.query);
+
+        const paginatorValidateErrors = await Paginator.validate(
+            paginatorValues
+        );
+
+        if (paginatorValidateErrors) {
+            return res.status(400).send(paginatorValidateErrors);
+        }
+
+        const bloggers = await bloggersService.findBloggers(
+            paginatorValues.searchNameTerm,
+            {
+                pageNumber: paginatorValues.pageNumber,
+                pageSize: paginatorValues.pageSize,
+            }
+        );
         res.status(200).send(bloggers);
     })
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {
@@ -40,6 +59,33 @@ bloggersRouter
 
         res.status(200).send(blogger);
     })
+    .get(`/:id/posts`, async (req: Request, res: Response) => {
+        const { searchNameTerm, pageNumber, pageSize } = new Paginator(
+            req.query
+        );
+
+        const bloggerId = Number(req.params.id);
+
+        const postValidator = new Post();
+
+        postValidator.bloggerId === bloggerId;
+
+        const errors = await Post.validate(postValidator);
+
+        if (errors) {
+            res.status(400).send(errors);
+            return;
+        }
+
+        const bloggers = await postsService.findPosts(
+            { searchNameTerm, bloggerId },
+            {
+                pageNumber: pageNumber,
+                pageSize: pageSize,
+            }
+        );
+        res.status(200).send(bloggers);
+    })
     .post(
         "/",
         async (
@@ -66,6 +112,72 @@ bloggersRouter
             );
 
             res.status(201).send(newBlogger);
+        }
+    )
+    .post(
+        "/:bloggerId/posts",
+        async (
+            req: Request<
+                { bloggerId: string | string[] },
+                {},
+                {
+                    title: string;
+                    shortDescription: string;
+                    content: string;
+                }
+            >,
+            res: Response
+        ) => {
+            const { title, content, shortDescription } = req.body;
+
+            const bloggerId = +req.params.bloggerId;
+
+            const postValidation = new Post();
+
+            postValidation.title = title;
+            postValidation.bloggerId = bloggerId;
+            postValidation.content = content;
+            postValidation.shortDescription = shortDescription;
+
+            const errors = await Post.validate(postValidation);
+
+            if (errors) {
+                res.status(400).send(errors);
+                return;
+            }
+
+            try {
+                const newPost = await postsService.createPost({
+                    title,
+                    bloggerId,
+                    content,
+                    shortDescription,
+                });
+
+                if (!newPost) {
+                    res.status(400).send(
+                        setErrors([
+                            {
+                                field: "",
+                                message: `Post doesn't created`,
+                            },
+                        ])
+                    );
+                    return;
+                }
+
+                res.status(201).send(newPost);
+            } catch (error) {
+                res.status(400).send(
+                    setErrors([
+                        {
+                            field: "",
+                            message: (error as Error).message,
+                        },
+                    ])
+                );
+                return;
+            }
         }
     )
     .put(

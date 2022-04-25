@@ -23,8 +23,9 @@ try {
         app.use(`${BASE_URL}/bloggers`, bloggersRouter);
         app.use(`${BASE_URL}/posts`, postsRoute);
 
+        await runDB();
+
         app.listen(PORT, async () => {
-            await runDB();
             console.log(`Example app listening on port ${PORT}`);
         });
     })();

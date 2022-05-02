@@ -1,6 +1,15 @@
 import { app } from ".";
 import { PORT } from "./constants";
+import { runDB } from "./respositories/db";
 
-app.listen(PORT, async () => {
-    console.log(`Example app listening on port ${PORT}`);
-});
+try {
+    (async () => {
+        await runDB();
+
+        app.listen(PORT, async () => {
+            console.log(`Example app listening on port ${PORT}`);
+        });
+    })();
+} catch (error) {
+    console.error(error);
+}

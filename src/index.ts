@@ -3,9 +3,9 @@ import "dotenv/config";
 import express from "express";
 import { BASE_URL, PORT } from "./constants";
 import { CheckBodyIsEmpty } from "./middlewares/CheckBodyEmpty";
-import { runDB } from "./respositories/db";
 import { bloggersRouter } from "./routes/bloggers-route";
 import { postsRoute } from "./routes/posts-route";
+import { usersRoute } from "./routes/users-route";
 
 export const app = express();
 
@@ -17,12 +17,7 @@ try {
         app.use(CheckBodyIsEmpty);
         app.use(`${BASE_URL}/bloggers`, bloggersRouter);
         app.use(`${BASE_URL}/posts`, postsRoute);
-
-        // await runDB();
-
-        // app.listen(PORT, async () => {
-        //     console.log(`Example app listening on port ${PORT}`);
-        // });
+        app.use(`${BASE_URL}/users`, usersRoute);
     })();
 } catch (error) {
     console.error(error);

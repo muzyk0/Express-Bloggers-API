@@ -6,7 +6,7 @@ export type TFilter<T = any> = {
     softRemove?: boolean;
 } & Filter<T>;
 
-type TCollection = "bloggers" | "posts";
+type TCollection = "bloggers" | "posts" | "users";
 
 export class EntityManager {
     constructor(protected bd: Db) {}
@@ -34,13 +34,7 @@ export class EntityManager {
         const result = await this.bd
             .collection<C>(collection)
             .find(filter, { projection: { _id: false } })
-            .skip(
-                pageNumber > 0
-                    ? (totalPagesCount > pageNumber
-                          ? pageNumber
-                          : totalPagesCount - 1) * pageSize
-                    : 0
-            )
+            .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
             .limit(pageSize)
             .toArray();
 

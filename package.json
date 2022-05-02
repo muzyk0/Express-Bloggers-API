@@ -11,12 +11,14 @@
         "dev": "nodemon --inspect dist/index.js",
         "dev2": "nodemon --inspect dist/server.js",
         "test": "tsc && jest",
+        "test:watch": "tsc && jest --watch",
         "watchAndRun": "concurrently \"tsc -w\" \"nodemon --inspect dist/index.js\"",
         "watch": "tsc -w"
     },
     "author": "muzyk0 <ru9art@gmail.com>",
     "license": "ISC",
     "description": "Simple RestAPI server without DB",
+    "preset": "@shelf/jest-mongodb",
     "dependencies": {
         "class-validator": "^0.13.2",
         "concurrently": "^7.0.0",
@@ -26,6 +28,7 @@
         "mongodb": "^4.5.0"
     },
     "devDependencies": {
+        "@shelf/jest-mongodb": "^2.2.2",
         "@types/cors": "^2.8.12",
         "@types/express": "^4.17.13",
         "@types/jest": "^27.4.1",

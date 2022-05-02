@@ -9,7 +9,9 @@
         "build": "tsc",
         "start": "node dist/index.js",
         "dev": "nodemon --inspect dist/index.js",
-        "dev2": "concurrently \"tsc -w\" \"nodemon --inspect dist/index.js\"",
+        "dev2": "nodemon --inspect dist/server.js",
+        "test": "tsc && jest",
+        "watchAndRun": "concurrently \"tsc -w\" \"nodemon --inspect dist/index.js\"",
         "watch": "tsc -w"
     },
     "author": "muzyk0 <ru9art@gmail.com>",
@@ -26,8 +28,13 @@
     "devDependencies": {
         "@types/cors": "^2.8.12",
         "@types/express": "^4.17.13",
+        "@types/jest": "^27.4.1",
         "@types/node": "^17.0.23",
+        "@types/supertest": "^2.0.12",
+        "jest": "^27.5.1",
         "nodemon": "^2.0.15",
+        "supertest": "^6.2.2",
+        "ts-jest": "^27.1.4",
         "ts-node": "^10.7.0",
         "typescript": "^4.6.3"
     }

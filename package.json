@@ -7,7 +7,7 @@
     },
     "scripts": {
         "build": "tsc",
-        "start": "node dist/index.js",
+        "start": "node dist/server.js",
         "dev": "nodemon --inspect dist/index.js",
         "dev2": "nodemon --inspect dist/server.js",
         "test": "tsc && jest",

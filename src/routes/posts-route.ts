@@ -21,7 +21,7 @@ postsRoute
         }
 
         const posts = await postsService.findPosts(
-            { searchNameTerm: paginatorValues.searchNameTerm },
+            { searchNameTerm: paginatorValues.SearchNameTerm },
             {
                 page: paginatorValues.PageNumber,
                 pageSize: paginatorValues.PageSize,

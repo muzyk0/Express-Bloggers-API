@@ -22,7 +22,7 @@ bloggersRouter
         }
 
         const bloggers = await bloggersService.findBloggers(
-            paginatorValues.searchNameTerm,
+            paginatorValues.SearchNameTerm,
             {
                 page: paginatorValues.PageNumber,
                 pageSize: paginatorValues.PageSize,
@@ -62,7 +62,7 @@ bloggersRouter
     })
     .get(`/:id/posts`, async (req: Request, res: Response) => {
         const {
-            searchNameTerm,
+            SearchNameTerm: searchNameTerm,
             PageNumber: pageNumber,
             PageSize: pageSize,
         } = new Paginator(req.query);

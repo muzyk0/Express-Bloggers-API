@@ -16,10 +16,10 @@ export type PaginatorOptions = Pick<
 
 export class Paginator extends ValidationErrors {
     @IsString()
-    searchNameTerm: string = "";
+    SearchNameTerm: string = "";
 
     @IsInt()
-    @Min(0)
+    @Min(1)
     PageNumber: number = 1;
 
     @IsInt()
@@ -30,7 +30,7 @@ export class Paginator extends ValidationErrors {
     constructor({
         PageNumber,
         PageSize,
-        searchNameTerm,
+        SearchNameTerm,
     }: {
         [key: string]: any;
     }) {
@@ -52,12 +52,12 @@ export class Paginator extends ValidationErrors {
             this.PageSize = +PageSize[0];
         }
 
-        if (typeof searchNameTerm === "string") {
-            this.searchNameTerm = searchNameTerm;
+        if (typeof SearchNameTerm === "string") {
+            this.SearchNameTerm = SearchNameTerm;
         }
 
-        if (Array.isArray(searchNameTerm) && searchNameTerm[0]) {
-            this.searchNameTerm = searchNameTerm[0];
+        if (Array.isArray(SearchNameTerm) && SearchNameTerm[0]) {
+            this.SearchNameTerm = SearchNameTerm[0];
         }
     }
 }

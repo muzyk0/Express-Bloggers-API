@@ -19,7 +19,7 @@ export class EntityManager {
             pageSize: 10,
         }
     ): Promise<ResponseDataWithPaginator<C>> {
-        const filter = {
+        const filter: Filter<C> = {
             ...(options as Filter<C>),
 
             ...(withArchived ? {} : { deleted: { $exists: false } }),
@@ -27,7 +27,7 @@ export class EntityManager {
 
         const totalCount = await this.bd
             .collection<C>(collection)
-            .countDocuments(filter);
+            .countDocuments();
 
         const totalPagesCount = Math.ceil(totalCount / pageSize);
 

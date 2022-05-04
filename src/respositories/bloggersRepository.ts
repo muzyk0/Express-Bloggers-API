@@ -26,7 +26,7 @@ export const bloggersRepository = {
     ): Promise<ResponseDataWithPaginator<IBlogger>> {
         return m.find<IBlogger>(
             "bloggers",
-            searchNameTerm ? { title: { $regex: searchNameTerm } } : {},
+            searchNameTerm ? { name: { $regex: searchNameTerm } } : {},
             paginatorOptions
         );
     },

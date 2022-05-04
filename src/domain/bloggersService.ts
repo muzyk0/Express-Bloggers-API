@@ -30,10 +30,7 @@ export const bloggersService = {
     ): Promise<IBlogger | null> {
         return bloggersRepository.updateBlogger(id, blogger);
     },
-    async deleteBlogger(
-        id: number,
-        options?: { softRemove: boolean }
-    ): Promise<boolean> {
-        return bloggersRepository.deleteBlogger(id, options);
+    async deleteBlogger(id: number): Promise<boolean> {
+        return bloggersRepository.deleteBloggerById(id, { softRemove: false });
     },
 };

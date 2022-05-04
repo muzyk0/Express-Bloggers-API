@@ -244,9 +244,7 @@ bloggersRouter
             }
         }
 
-        const bloggerIsDeleted = await bloggersService.deleteBlogger(id, {
-            softRemove: true,
-        });
+        const bloggerIsDeleted = await bloggersService.deleteBlogger(id);
 
         if (!bloggerIsDeleted) {
             res.status(404).send(

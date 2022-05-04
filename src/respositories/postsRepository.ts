@@ -56,8 +56,14 @@ export const postsRepository = {
 
         return modifyPost.value;
     },
-    async deletePostById(id: IPost["id"]): Promise<boolean> {
-        const result = await m.deleteOne("posts", { id, softRemove: true });
+    async deletePostById(
+        id: IPost["id"],
+        options?: { softRemove: boolean }
+    ): Promise<boolean> {
+        const result = await m.deleteOne("posts", {
+            id,
+            softRemove: options?.softRemove,
+        });
 
         return result;
     },

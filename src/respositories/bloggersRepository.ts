@@ -66,26 +66,15 @@ export const bloggersRepository = {
         );
         return result.value;
     },
-    async deleteBlogger(
-        id: number,
+    async deleteBloggerById(
+        id: IBlogger["id"],
         options?: { softRemove: boolean }
     ): Promise<boolean> {
-        if (options?.softRemove) {
-            const result = await bloggersCollection.updateOne(
-                { id, deleted: { $exists: false } },
-                {
-                    $currentDate: { deleted: true },
-                }
-            );
+        const result = await m.deleteOne("bloggers", {
+            id,
+            softRemove: options?.softRemove,
+        });
 
-            return !!result.matchedCount;
-        }
-
-        const result = await bloggersCollection.deleteOne({ id });
-
-        if (result.deletedCount) {
-            return true;
-        }
-        return false;
+        return result;
     },
 };

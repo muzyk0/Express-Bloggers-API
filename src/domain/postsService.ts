@@ -49,6 +49,6 @@ export const postsService = {
         return postsRepository.updatePost(newPost);
     },
     async deletePost(id: IPost["id"]): Promise<boolean> {
-        return postsRepository.deletePostById(id);
+        return postsRepository.deletePostById(id, { softRemove: false });
     },
 };

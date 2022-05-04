@@ -24,10 +24,10 @@ bloggersRouter
             paginatorValues.searchNameTerm,
             {
                 pageNumber: paginatorValues.pageNumber,
-                pageSize: paginatorValues.pageSize,
+                pageSize: 100,
             }
         );
-        res.status(200).send(bloggers);
+        res.status(200).send(bloggers.items);
     })
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
@@ -96,7 +96,7 @@ bloggersRouter
 
             let blogger = new Blogger();
 
-            blogger.name = name;
+            blogger.name = name?.trim();
             blogger.youtubeUrl = youtubeUrl;
 
             const errors = await Blogger.validate(blogger);
@@ -197,7 +197,7 @@ bloggersRouter
                 let blogger = new Blogger();
 
                 blogger.id = id;
-                blogger.name = name;
+                blogger.name = name?.trim();
                 blogger.youtubeUrl = youtubeUrl;
 
                 const errors = await Blogger.validate(blogger);

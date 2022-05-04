@@ -21,7 +21,7 @@ interface IResponse {
 export const setErrors = (errors: ErrorMessage[]): IResponse => {
     return {
         errorsMessages: errors,
-        resultCode: 0,
+        resultCode: 1,
     };
 };
 
@@ -35,7 +35,7 @@ export class ValidationErrors {
         ValidationErrors.setErrors = (errors: ErrorMessage[]): IResponse => {
             return {
                 errorsMessages: errors,
-                resultCode: 0,
+                resultCode: 1,
             };
         };
     }
@@ -51,7 +51,7 @@ export class ValidationErrors {
         });
 
         if (errors.length > 0) {
-            const result = await Promise.all(
+            const result: ErrorMessage[] = await Promise.all(
                 errors
                     .map((e) =>
                         Object.entries(e.constraints ?? []).map(
@@ -64,7 +64,19 @@ export class ValidationErrors {
                     .flat(1)
             );
 
-            return this.setErrors(result);
+            return this.setErrors(this.sliceRepeatFields(result));
+            // return this.setErrors(result);
         }
+    }
+    static sliceRepeatFields(errors: ErrorMessage[]): ErrorMessage[] {
+        const uniqErrors = new Map();
+
+        errors.map((error) => {
+            if (!uniqErrors.has(error.field)) {
+                uniqErrors.set(error.field, error);
+            }
+        });
+
+        return Array.from(uniqErrors.values());
     }
 }

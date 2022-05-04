@@ -1,4 +1,4 @@
-import { IsInt, Length } from "class-validator";
+import { IsInt, IsNotEmpty, Length } from "class-validator";
 import { ValidationErrors } from "../lib/ValidationErrors";
 import { Nullable } from "../types/genericTypes";
 import { IBlogger } from "./Blogger";
@@ -19,13 +19,14 @@ export class Post extends ValidationErrors {
     @IsInt()
     id: Nullable<number> = null;
 
-    @Length(1)
+    @Length(1, 30)
+    @IsNotEmpty()
     title: Nullable<string> = null;
 
-    @Length(1)
+    @Length(0, 100)
     shortDescription: Nullable<string> = null;
 
-    @Length(1)
+    @Length(1, 1000)
     content: Nullable<string> = null;
 
     @IsInt()

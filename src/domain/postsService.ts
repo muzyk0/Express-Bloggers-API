@@ -23,7 +23,7 @@ export const postsService = {
         const blogger = await bloggersService.findBloggerById(post.bloggerId);
 
         if (!blogger) {
-            throw new Error("Blogger doesn't exist");
+            return null;
         }
 
         const newPostInput: IPost = {
@@ -38,7 +38,7 @@ export const postsService = {
         const blogger = await bloggersService.findBloggerById(post.bloggerId);
 
         if (!blogger) {
-            throw new Error("Blogger doesn't exist");
+            return null;
         }
 
         const newPost: IPost = {

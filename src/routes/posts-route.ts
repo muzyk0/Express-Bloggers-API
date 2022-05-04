@@ -3,6 +3,7 @@ import { postsService } from "../domain/postsService";
 import { Post } from "../entity/Post";
 import { setErrors } from "../lib/ValidationErrors";
 import { Paginator } from "../lib/Paginator";
+import { bloggersService } from "../domain/bloggersService";
 
 export const postsRoute = express.Router();
 
@@ -22,10 +23,10 @@ postsRoute
             { searchNameTerm: paginatorValues.searchNameTerm },
             {
                 pageNumber: paginatorValues.pageNumber,
-                pageSize: paginatorValues.pageSize,
+                pageSize: 100,
             }
         );
-        res.status(200).send(posts);
+        res.status(200).send(posts.items);
     })
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
@@ -79,9 +80,9 @@ postsRoute
             {
                 const postValidation = new Post();
 
-                postValidation.title = title;
+                postValidation.title = title?.trim();
                 postValidation.bloggerId = bloggerId;
-                postValidation.content = content;
+                postValidation.content = content?.trim();
                 postValidation.shortDescription = shortDescription;
 
                 const errors = await Post.validate(postValidation);
@@ -92,38 +93,40 @@ postsRoute
                 }
             }
 
-            try {
-                const newPost = await postsService.createPost({
-                    title,
-                    bloggerId,
-                    content,
-                    shortDescription,
-                });
+            const blogger = await bloggersService.findBloggerById(bloggerId);
 
-                if (!newPost) {
-                    res.status(400).send(
-                        setErrors([
-                            {
-                                field: "",
-                                message: `Post doesn't created`,
-                            },
-                        ])
-                    );
-                    return;
-                }
-
-                res.status(201).send(newPost);
-            } catch (error) {
+            if (!blogger) {
                 res.status(400).send(
                     setErrors([
                         {
-                            field: "",
-                            message: (error as Error).message,
+                            field: "bloggerId",
+                            message: `Blogger doesn't exist`,
                         },
                     ])
                 );
                 return;
             }
+
+            const newPost = await postsService.createPost({
+                title,
+                bloggerId,
+                content,
+                shortDescription,
+            });
+
+            if (!newPost) {
+                res.status(400).send(
+                    setErrors([
+                        {
+                            field: "",
+                            message: `Post doesn't created`,
+                        },
+                    ])
+                );
+                return;
+            }
+
+            res.status(201).send(newPost);
         }
     )
 
@@ -149,9 +152,9 @@ postsRoute
                 const postValidation = new Post();
 
                 postValidation.id = id;
-                postValidation.title = title;
+                postValidation.title = title?.trim();
                 postValidation.bloggerId = bloggerId;
-                postValidation.content = content;
+                postValidation.content = content?.trim();
                 postValidation.shortDescription = shortDescription;
 
                 const errors = await Post.validate(postValidation);
@@ -162,45 +165,45 @@ postsRoute
                 }
             }
 
-            try {
-                const post = await postsService.updatePost({
-                    id,
-                    title,
-                    shortDescription,
-                    bloggerId,
-                    content,
-                });
+            const blogger = await bloggersService.findBloggerById(bloggerId);
 
-                if (!post) {
-                    res.status(404).send(
-                        setErrors([
-                            {
-                                field: "",
-                                message: `Post doesn't updated`,
-                            },
-                        ])
-                    );
-                    return;
-                }
-
-                res.status(204).send(post);
-            } catch (error) {
+            if (!blogger) {
                 res.status(400).send(
                     setErrors([
                         {
-                            field: "",
-                            message: (error as Error).message,
+                            field: "bloggerId",
+                            message: `Blogger doesn't exist`,
                         },
                     ])
                 );
                 return;
             }
+
+            const post = await postsService.updatePost({
+                id,
+                title,
+                shortDescription,
+                bloggerId,
+                content,
+            });
+
+            if (!post) {
+                res.status(404).send(
+                    setErrors([
+                        {
+                            field: "",
+                            message: `Post doesn't updated`,
+                        },
+                    ])
+                );
+                return;
+            }
+
+            res.status(204).send(post);
         }
     )
     .delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
-
-        console.log("id: ", id);
 
         {
             const postValidation = new Post();
@@ -216,8 +219,6 @@ postsRoute
         }
 
         const isDeleted = await postsService.deletePost(id);
-
-        console.log("isDeleted: ", isDeleted);
 
         if (!isDeleted) {
             res.status(404).send(

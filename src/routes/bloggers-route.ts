@@ -5,6 +5,7 @@ import { setErrors } from "../lib/ValidationErrors";
 import { Paginator } from "../lib/Paginator";
 import { postsService } from "../domain/postsService";
 import { Post } from "../entity/Post";
+import { isAuthWithBase } from "../middlewares/isAuthWithBase";
 
 export const bloggersRouter = express.Router();
 
@@ -88,6 +89,7 @@ bloggersRouter
     })
     .post(
         "/",
+        isAuthWithBase,
         async (
             req: Request<{}, {}, { name: string; youtubeUrl: string }>,
             res: Response
@@ -116,9 +118,10 @@ bloggersRouter
     )
     .post(
         "/:bloggerId/posts",
+        isAuthWithBase,
         async (
             req: Request<
-                { bloggerId: string | string[] },
+                { bloggerId: string },
                 {},
                 {
                     title: string;
@@ -182,6 +185,7 @@ bloggersRouter
     )
     .put(
         "/:id",
+        isAuthWithBase,
         async (
             req: Request<
                 { id: string },
@@ -228,35 +232,39 @@ bloggersRouter
             res.sendStatus(204);
         }
     )
-    .delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
-        const id = parseInt(req.params.id);
+    .delete(
+        "/:id",
+        isAuthWithBase,
+        async (req: Request<{ id: string }>, res: Response) => {
+            const id = parseInt(req.params.id);
 
-        {
-            let blogger = new Blogger();
+            {
+                let blogger = new Blogger();
 
-            blogger.id = id;
+                blogger.id = id;
 
-            const errors = await Blogger.validate(blogger);
+                const errors = await Blogger.validate(blogger);
 
-            if (errors) {
-                res.status(400).send(errors);
+                if (errors) {
+                    res.status(400).send(errors);
+                    return;
+                }
+            }
+
+            const bloggerIsDeleted = await bloggersService.deleteBlogger(id);
+
+            if (!bloggerIsDeleted) {
+                res.status(404).send(
+                    setErrors([
+                        {
+                            field: "",
+                            message: `Blogger doesn't exist`,
+                        },
+                    ])
+                );
                 return;
             }
+
+            res.sendStatus(204);
         }
-
-        const bloggerIsDeleted = await bloggersService.deleteBlogger(id);
-
-        if (!bloggerIsDeleted) {
-            res.status(404).send(
-                setErrors([
-                    {
-                        field: "",
-                        message: `Blogger doesn't exist`,
-                    },
-                ])
-            );
-            return;
-        }
-
-        res.sendStatus(204);
-    });
+    );

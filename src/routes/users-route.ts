@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { usersService } from "../domain/usersService";
 import { Paginator } from "../lib/Paginator";
+import { usersService } from "../lib/usersService";
 
 export const usersRoute = express.Router();
 

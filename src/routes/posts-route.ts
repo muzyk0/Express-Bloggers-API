@@ -4,6 +4,7 @@ import { Post } from "../entity/Post";
 import { setErrors } from "../lib/ValidationErrors";
 import { Paginator } from "../lib/Paginator";
 import { bloggersService } from "../domain/bloggersService";
+import { isAuthWithBase } from "../middlewares/isAuthWithBase";
 
 export const postsRoute = express.Router();
 
@@ -62,6 +63,7 @@ postsRoute
     })
     .post(
         "/",
+        isAuthWithBase,
         async (
             req: Request<
                 {},
@@ -132,6 +134,7 @@ postsRoute
 
     .put(
         "/:id",
+        isAuthWithBase,
         async (
             req: Request<
                 { id: string },
@@ -202,35 +205,39 @@ postsRoute
             res.status(204).send(post);
         }
     )
-    .delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
-        const id = parseInt(req.params.id);
+    .delete(
+        "/:id",
+        isAuthWithBase,
+        async (req: Request<{ id: string }>, res: Response) => {
+            const id = parseInt(req.params.id);
 
-        {
-            const postValidation = new Post();
+            {
+                const postValidation = new Post();
 
-            postValidation.id = id;
+                postValidation.id = id;
 
-            const errors = await Post.validate(postValidation);
+                const errors = await Post.validate(postValidation);
 
-            if (errors) {
-                res.status(400).send(errors);
+                if (errors) {
+                    res.status(400).send(errors);
+                    return;
+                }
+            }
+
+            const isDeleted = await postsService.deletePost(id);
+
+            if (!isDeleted) {
+                res.status(404).send(
+                    setErrors([
+                        {
+                            field: "",
+                            message: `Post doesn't deleted`,
+                        },
+                    ])
+                );
                 return;
             }
+
+            res.sendStatus(204);
         }
-
-        const isDeleted = await postsService.deletePost(id);
-
-        if (!isDeleted) {
-            res.status(404).send(
-                setErrors([
-                    {
-                        field: "",
-                        message: `Post doesn't deleted`,
-                    },
-                ])
-            );
-            return;
-        }
-
-        res.sendStatus(204);
-    });
+    );

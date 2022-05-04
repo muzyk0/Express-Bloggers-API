@@ -23,11 +23,11 @@ postsRoute
         const posts = await postsService.findPosts(
             { searchNameTerm: paginatorValues.searchNameTerm },
             {
-                pageNumber: paginatorValues.pageNumber,
-                pageSize: 100,
+                page: paginatorValues.PageNumber,
+                pageSize: paginatorValues.PageSize,
             }
         );
-        res.status(200).send(posts.items);
+        res.status(200).send(posts);
     })
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);

@@ -24,11 +24,11 @@ bloggersRouter
         const bloggers = await bloggersService.findBloggers(
             paginatorValues.searchNameTerm,
             {
-                pageNumber: paginatorValues.pageNumber,
-                pageSize: 100,
+                page: paginatorValues.PageNumber,
+                pageSize: paginatorValues.PageSize,
             }
         );
-        res.status(200).send(bloggers.items);
+        res.status(200).send(bloggers);
     })
     .get("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const id = parseInt(req.params.id);
@@ -61,9 +61,11 @@ bloggersRouter
         res.status(200).send(blogger);
     })
     .get(`/:id/posts`, async (req: Request, res: Response) => {
-        const { searchNameTerm, pageNumber, pageSize } = new Paginator(
-            req.query
-        );
+        const {
+            searchNameTerm,
+            PageNumber: pageNumber,
+            PageSize: pageSize,
+        } = new Paginator(req.query);
 
         const bloggerId = Number(req.params.id);
 
@@ -78,14 +80,28 @@ bloggersRouter
             return;
         }
 
-        const bloggers = await postsService.findPosts(
+        const blogger = await bloggersService.findBloggerById(bloggerId);
+
+        if (!blogger) {
+            res.status(404).send(
+                setErrors([
+                    {
+                        field: "",
+                        message: `Blogger doesn't exist`,
+                    },
+                ])
+            );
+            return;
+        }
+
+        const posts = await postsService.findPosts(
             { searchNameTerm, bloggerId },
             {
-                pageNumber: pageNumber,
+                page: pageNumber,
                 pageSize: pageSize,
             }
         );
-        res.status(200).send(bloggers);
+        res.status(200).send(posts);
     })
     .post(
         "/",
@@ -137,9 +153,9 @@ bloggersRouter
 
             const postValidation = new Post();
 
-            postValidation.title = title;
+            postValidation.title = title?.trim();
             postValidation.bloggerId = bloggerId;
-            postValidation.content = content;
+            postValidation.content = content?.trim();
             postValidation.shortDescription = shortDescription;
 
             const errors = await Post.validate(postValidation);
@@ -149,38 +165,40 @@ bloggersRouter
                 return;
             }
 
-            try {
-                const newPost = await postsService.createPost({
-                    title,
-                    bloggerId,
-                    content,
-                    shortDescription,
-                });
+            const blogger = await bloggersService.findBloggerById(bloggerId);
 
-                if (!newPost) {
-                    res.status(400).send(
-                        setErrors([
-                            {
-                                field: "",
-                                message: `Post doesn't created`,
-                            },
-                        ])
-                    );
-                    return;
-                }
-
-                res.status(201).send(newPost);
-            } catch (error) {
-                res.status(400).send(
+            if (!blogger) {
+                res.status(404).send(
                     setErrors([
                         {
-                            field: "",
-                            message: (error as Error).message,
+                            field: "bloggerId",
+                            message: `Blogger doesn't exist`,
                         },
                     ])
                 );
                 return;
             }
+
+            const newPost = await postsService.createPost({
+                title,
+                bloggerId,
+                content,
+                shortDescription,
+            });
+
+            if (!newPost) {
+                res.status(400).send(
+                    setErrors([
+                        {
+                            field: "",
+                            message: `Post doesn't created`,
+                        },
+                    ])
+                );
+                return;
+            }
+
+            res.status(201).send(newPost);
         }
     )
     .put(

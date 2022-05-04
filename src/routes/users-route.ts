@@ -16,8 +16,8 @@ usersRoute.get("/", async (req: Request, res: Response) => {
     const users = usersService.findUsers(
         {},
         {
-            pageNumber: paginatorValues.pageNumber,
-            pageSize: paginatorValues.pageSize,
+            page: paginatorValues.PageNumber,
+            pageSize: paginatorValues.PageSize,
         }
     );
     res.status(200).send(users);

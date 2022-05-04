@@ -14,8 +14,8 @@ export class EntityManager {
     async find<C = any>(
         collection: TCollection,
         { withArchived = false, ...options }: TFilter,
-        { pageNumber, pageSize }: PaginatorOptions = {
-            pageNumber: 1,
+        { page: pageNumber, pageSize }: PaginatorOptions = {
+            page: 1,
             pageSize: 10,
         }
     ): Promise<ResponseDataWithPaginator<C>> {
@@ -40,7 +40,7 @@ export class EntityManager {
 
         return {
             pagesCount: totalPagesCount,
-            pageNumber,
+            page: pageNumber,
             pageSize,
             totalCount,
             items: result as C[],

@@ -3,7 +3,7 @@ import { ValidationErrors } from "./ValidationErrors";
 
 export interface ResponseDataWithPaginator<T = any[]> {
     pagesCount: number;
-    pageNumber: number;
+    page: number;
     pageSize: number;
     totalCount: number;
     items: T[];
@@ -11,7 +11,7 @@ export interface ResponseDataWithPaginator<T = any[]> {
 
 export type PaginatorOptions = Pick<
     ResponseDataWithPaginator,
-    "pageNumber" | "pageSize"
+    "page" | "pageSize"
 >;
 
 export class Paginator extends ValidationErrors {
@@ -20,36 +20,36 @@ export class Paginator extends ValidationErrors {
 
     @IsInt()
     @Min(0)
-    pageNumber: number = 0;
+    PageNumber: number = 1;
 
     @IsInt()
     @Min(0)
     @Max(100)
-    pageSize: number = 10;
+    PageSize: number = 10;
 
     constructor({
-        pageNumber,
-        pageSize,
+        PageNumber,
+        PageSize,
         searchNameTerm,
     }: {
         [key: string]: any;
     }) {
         super();
 
-        if (typeof pageNumber === "string") {
-            this.pageNumber = +pageNumber;
+        if (typeof PageNumber === "string") {
+            this.PageNumber = +PageNumber;
         }
 
-        if (Array.isArray(pageNumber) && pageNumber[0]) {
-            this.pageNumber = +pageNumber[0];
+        if (Array.isArray(PageNumber) && PageNumber[0]) {
+            this.PageNumber = +PageNumber[0];
         }
 
-        if (typeof pageSize === "string") {
-            this.pageSize = +pageSize;
+        if (typeof PageSize === "string") {
+            this.PageSize = +PageSize;
         }
 
-        if (Array.isArray(pageSize) && pageSize[0]) {
-            this.pageSize = +pageSize[0];
+        if (Array.isArray(PageSize) && PageSize[0]) {
+            this.PageSize = +PageSize[0];
         }
 
         if (typeof searchNameTerm === "string") {

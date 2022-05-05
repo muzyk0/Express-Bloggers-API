@@ -12,7 +12,7 @@ export function isAuthWithBase(
         return;
     }
 
-    if (req.headers.authorization.split(" ")[0] === "Bearer") {
+    if (req.headers.authorization.split(" ")[0] !== "Basic") {
         res.send(401);
         return;
     }

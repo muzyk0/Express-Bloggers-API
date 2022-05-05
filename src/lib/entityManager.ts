@@ -27,7 +27,7 @@ export class EntityManager {
 
         const totalCount = await this.bd
             .collection<C>(collection)
-            .countDocuments();
+            .countDocuments(filter);
 
         const totalPagesCount = Math.ceil(totalCount / pageSize);
 

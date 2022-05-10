@@ -1,10 +1,10 @@
-import { IsInt, IsNotEmpty, Length } from "class-validator";
+import { IsInt, IsNotEmpty, IsString, Length } from "class-validator";
 import { ValidationErrors } from "../lib/ValidationErrors";
 import { Nullable } from "../types/genericTypes";
 import { IBlogger } from "./Blogger";
 
 export interface IPost {
-    id: number;
+    id: string;
     title: string;
     shortDescription: string;
     content: string;
@@ -16,8 +16,8 @@ export type PostInput = Partial<Pick<IPost, "id">> &
     Pick<IPost, "title" | "content" | "shortDescription" | "bloggerId">;
 
 export class Post extends ValidationErrors {
-    @IsInt()
-    id: Nullable<number> = null;
+    @IsString()
+    id: Nullable<string> = null;
 
     @Length(1, 30)
     @IsNotEmpty()
@@ -29,7 +29,7 @@ export class Post extends ValidationErrors {
     @Length(1, 1000)
     content: Nullable<string> = null;
 
-    @IsInt()
+    @IsString()
     bloggerId: Nullable<IBlogger["id"]> = null;
 
     @Length(1)

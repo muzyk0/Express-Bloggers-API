@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, Length, Matches } from "class-validator";
+import { IsInt, IsNotEmpty, Length, Matches, IsString } from "class-validator";
 import { ValidationErrors } from "../lib/ValidationErrors";
 import { Nullable } from "../types/genericTypes";
 
@@ -6,7 +6,7 @@ export const youtubeURLPattern =
     /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;
 
 export interface IBlogger {
-    id: number;
+    id: string;
 
     name: string;
 
@@ -14,8 +14,8 @@ export interface IBlogger {
 }
 
 export class Blogger extends ValidationErrors {
-    @IsInt()
-    id: Nullable<number> = null;
+    @IsString()
+    id: Nullable<string> = null;
 
     @Length(1, 15)
     @IsNotEmpty()

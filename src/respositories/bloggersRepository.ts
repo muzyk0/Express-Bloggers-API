@@ -40,7 +40,7 @@ export class BloggersRepository {
     //     });
     // },
     async getBloggerById(
-        id: number,
+        id: IBlogger["id"],
         withArchived: boolean = false
     ): Promise<IBlogger | null> {
         return m.findOne<IBlogger>("bloggers", { withArchived, id });
@@ -52,7 +52,7 @@ export class BloggersRepository {
         return blogger;
     }
     async updateBlogger(
-        id: number,
+        id: IBlogger["id"],
         blogger: Pick<IBlogger, "name" | "youtubeUrl">
     ): Promise<IBlogger | null> {
         const result = await bloggersCollection.findOneAndUpdate(

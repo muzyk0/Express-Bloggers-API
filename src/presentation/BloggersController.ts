@@ -35,11 +35,11 @@ export class BloggersController {
 
     // .get("/:id")
     async getOneBlogger(req: Request<{ id: string }>, res: Response) {
-        const id = parseInt(req.params.id);
+        const bloggerId = req.params.id;
 
         const bloggerForValidation = new Blogger();
 
-        bloggerForValidation.id = id;
+        bloggerForValidation.id = bloggerId;
 
         const errors = await Blogger.validate(bloggerForValidation);
 
@@ -48,7 +48,7 @@ export class BloggersController {
             return;
         }
 
-        const blogger = await this.bloggersService.findBloggerById(id);
+        const blogger = await this.bloggersService.findBloggerById(bloggerId);
 
         if (!blogger) {
             res.status(404).send(
@@ -73,7 +73,7 @@ export class BloggersController {
             PageSize: pageSize,
         } = new Paginator(req.query);
 
-        const bloggerId = Number(req.params.id);
+        const bloggerId = req.params.id;
 
         const postValidator = new Post();
 
@@ -151,7 +151,7 @@ export class BloggersController {
     ) {
         const { title, content, shortDescription } = req.body;
 
-        const bloggerId = +req.params.bloggerId;
+        const bloggerId = req.params.bloggerId;
 
         const postValidation = new Post();
 
@@ -209,7 +209,7 @@ export class BloggersController {
         res: Response
     ) {
         const { name, youtubeUrl } = req.body;
-        const id = parseInt(req.params.id);
+        const id = req.params.id;
 
         {
             let blogger = new Blogger();
@@ -248,12 +248,12 @@ export class BloggersController {
 
     // .delete("/:id")
     async deleteBlogger(req: Request<{ id: string }>, res: Response) {
-        const id = parseInt(req.params.id);
+        const bloggerId = req.params.id;
 
         {
             let blogger = new Blogger();
 
-            blogger.id = id;
+            blogger.id = bloggerId;
 
             const errors = await Blogger.validate(blogger);
 
@@ -263,7 +263,9 @@ export class BloggersController {
             }
         }
 
-        const bloggerIsDeleted = await this.bloggersService.deleteBlogger(id);
+        const bloggerIsDeleted = await this.bloggersService.deleteBlogger(
+            bloggerId
+        );
 
         if (!bloggerIsDeleted) {
             res.status(404).send(

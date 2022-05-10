@@ -1,6 +1,7 @@
 import { IBlogger } from "../entity/Blogger";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { BloggersRepository } from "../respositories/bloggersRepository";
+import { v4 } from "uuid";
 
 export class BloggersService {
     constructor(private bloggersRepository: BloggersRepository) {}
@@ -14,12 +15,12 @@ export class BloggersService {
             paginatorOptions
         );
     }
-    async findBloggerById(id: number): Promise<IBlogger | null> {
+    async findBloggerById(id: IBlogger["id"]): Promise<IBlogger | null> {
         return this.bloggersRepository.getBloggerById(id);
     }
     async createBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
         const newBlogger: IBlogger = {
-            id: +new Date(),
+            id: v4(),
             name,
             youtubeUrl,
         };
@@ -27,12 +28,12 @@ export class BloggersService {
         return this.bloggersRepository.createBlogger(newBlogger);
     }
     async updateBlogger(
-        id: number,
+        id: IBlogger["id"],
         blogger: Pick<IBlogger, "name" | "youtubeUrl">
     ): Promise<IBlogger | null> {
         return this.bloggersRepository.updateBlogger(id, blogger);
     }
-    async deleteBlogger(id: number): Promise<boolean> {
+    async deleteBlogger(id: IBlogger["id"]): Promise<boolean> {
         return this.bloggersRepository.deleteBloggerById(id, {
             softRemove: false,
         });

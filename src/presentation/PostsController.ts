@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Paginator } from "../lib/Paginator";
 import { BloggersService } from "../domain/bloggersService";
-import { Blogger } from "../entity/Blogger";
+import { Blogger, IBlogger } from "../entity/Blogger";
 import { Post } from "../entity/Post";
 import { PostsService } from "../domain/postsService";
 
@@ -35,12 +35,12 @@ export class PostsController {
 
     // .get("/:id"
     async getPostById(req: Request<{ id: string }>, res: Response) {
-        const id = parseInt(req.params.id);
+        const postId = req.params.id;
 
         {
             const postValidation = new Post();
 
-            postValidation.id = id;
+            postValidation.id = postId;
 
             const errors = await Post.validate(postValidation);
 
@@ -50,7 +50,7 @@ export class PostsController {
             }
         }
 
-        const post = await this.postsService.findPostById(id);
+        const post = await this.postsService.findPostById(postId);
 
         if (!post) {
             res.status(404).send(
@@ -67,7 +67,7 @@ export class PostsController {
         res.status(200).send(post);
     }
 
-    //
+    // .post("/")
     async createNewPost(
         req: Request<
             {},
@@ -76,7 +76,7 @@ export class PostsController {
                 title: string;
                 shortDescription: string;
                 content: string;
-                bloggerId: number;
+                bloggerId: IBlogger["id"];
             }
         >,
         res: Response
@@ -144,13 +144,13 @@ export class PostsController {
                 title: string;
                 shortDescription: string;
                 content: string;
-                bloggerId: number;
+                bloggerId: IBlogger["id"];
             }
         >,
         res: Response
     ) {
         const { title, bloggerId, content, shortDescription } = req.body;
-        const id = parseInt(req.params.id);
+        const id = req.params.id;
 
         {
             const postValidation = new Post();
@@ -208,12 +208,12 @@ export class PostsController {
 
     // .delete("/:id")
     async deleteBlogger(req: Request<{ id: string }>, res: Response) {
-        const id = parseInt(req.params.id);
+        const bloggerId = req.params.id;
 
         {
             const postValidation = new Post();
 
-            postValidation.id = id;
+            postValidation.id = bloggerId;
 
             const errors = await Post.validate(postValidation);
 
@@ -223,7 +223,7 @@ export class PostsController {
             }
         }
 
-        const isDeleted = await this.postsService.deletePost(id);
+        const isDeleted = await this.postsService.deletePost(bloggerId);
 
         if (!isDeleted) {
             res.status(404).send(

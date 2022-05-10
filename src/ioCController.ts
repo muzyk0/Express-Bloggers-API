@@ -6,7 +6,7 @@ import { BloggersService } from "./domain/bloggersService";
 import { BloggersController } from "./presentation/BloggersController";
 import { PostsRepository } from "./respositories/postsRepository";
 import { PostsService } from "./domain/postsService";
-import { PostsController } from "./presentation/BloggersController copy";
+import { PostsController } from "./presentation/PostsController";
 
 const usersRepository = new UsersRepository();
 const postRepository = new PostsRepository();

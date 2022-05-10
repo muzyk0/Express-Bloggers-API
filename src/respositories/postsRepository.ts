@@ -3,7 +3,6 @@ import { db } from "./db";
 import { IPost } from "../entity/Post";
 import { EntityManager, TFilter } from "../lib/entityManager";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
-import { Nullable } from "../types/genericTypes";
 
 const postsCollection = db.collection<IPost>("posts");
 
@@ -17,7 +16,7 @@ export class PostsRepository {
             withArchived,
         }: {
             searchNameTerm?: string;
-            bloggerId?: number;
+            bloggerId?: IPost["id"];
             withArchived?: boolean;
         },
         paginatorOptions?: PaginatorOptions
@@ -35,7 +34,7 @@ export class PostsRepository {
         );
     }
     async getPostById(
-        id: number,
+        id: IPost["id"],
         withArchived: boolean = false
     ): Promise<IPost | null> {
         return m.findOne("posts", { withArchived, id });

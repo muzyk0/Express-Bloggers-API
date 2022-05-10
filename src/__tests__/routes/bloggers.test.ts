@@ -1,4 +1,4 @@
-import request from "supertest";
+import request, { Request } from "supertest";
 import { app } from "../..";
 import { IBlogger } from "../../entity/Blogger";
 
@@ -6,6 +6,8 @@ import { mongoDBClient } from "../../respositories/db";
 
 describe("Test the bloggers", () => {
     let testBlogger: IBlogger;
+
+    const basicAuthToken = "Basic YWRtaW46cXdlcnR5";
 
     beforeAll(async () => {
         await mongoDBClient.connect();
@@ -27,7 +29,7 @@ describe("Test the bloggers", () => {
         expect(result.statusCode).toBe(404);
     });
 
-    test("Blogger are created with payload data", async () => {
+    test("Blogger doesn't created without Basic authorization", async () => {
         const result = await request(app).post("/bloggers/").send({
             name: "Vlad",
             youtubeUrl: "https://youtubefake.com",
@@ -35,7 +37,26 @@ describe("Test the bloggers", () => {
 
         testBlogger = result.body;
 
+        expect(result.statusCode).toBe(401);
+        expect((result as any).request.header.Authorization).toBeUndefined();
+    });
+
+    test("Blogger are created with payload data and authorization", async () => {
+        const result = await request(app)
+            .post("/bloggers/")
+            .set({ Authorization: basicAuthToken })
+            .send({
+                name: "Vlad",
+                youtubeUrl: "https://youtubefake.com",
+            });
+
+        testBlogger = result.body;
+
+        expect((result as any).request.header.Authorization).toBe(
+            basicAuthToken
+        );
         expect(result.statusCode).toBe(201);
+
         expect(result.body.id).toBeDefined();
     });
 
@@ -46,7 +67,7 @@ describe("Test the bloggers", () => {
         expect(result.body).toEqual(testBlogger);
     });
 
-    test("Update Blogger with payload data and status code 204", async () => {
+    test("Update Blogger failed without authorization", async () => {
         testBlogger = {
             id: testBlogger.id,
             name: "Dimych",
@@ -57,6 +78,25 @@ describe("Test the bloggers", () => {
             .put(`/bloggers/${testBlogger.id}`)
             .send(testBlogger);
 
+        expect((result as any).request.header.Authorization).toBeUndefined();
+        expect(result.statusCode).toBe(401);
+    });
+
+    test("Update Blogger with payload data and status code 204 and authorization", async () => {
+        testBlogger = {
+            id: testBlogger.id,
+            name: "Dimych",
+            youtubeUrl: "https://youtube.com",
+        };
+
+        const result = await request(app)
+            .put(`/bloggers/${testBlogger.id}`)
+            .set({ Authorization: basicAuthToken })
+            .send(testBlogger);
+
+        expect((result as any).request.header.Authorization).toBe(
+            basicAuthToken
+        );
         expect(result.statusCode).toBe(204);
     });
 
@@ -67,9 +107,21 @@ describe("Test the bloggers", () => {
         expect(result.body).toEqual(testBlogger);
     });
 
-    test("Delete blogger send status code 200", async () => {
+    test("Delete blogger failed without authorization", async () => {
         const result = await request(app).delete(`/bloggers/${testBlogger.id}`);
 
+        expect((result as any).request.header.Authorization).toBeUndefined();
+        expect(result.statusCode).toBe(401);
+    });
+
+    test("Delete blogger send status code 200", async () => {
+        const result = await request(app)
+            .delete(`/bloggers/${testBlogger.id}`)
+            .set({ Authorization: basicAuthToken });
+
+        expect((result as any).request.header.Authorization).toBe(
+            basicAuthToken
+        );
         expect(result.statusCode).toBe(204);
     });
 

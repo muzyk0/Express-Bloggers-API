@@ -28,18 +28,18 @@ describe("Test the bloggers", () => {
         expect(result.statusCode).toBe(404);
     });
 
-    test("User is created with payload data", async () => {
-        const randomString = Math.random().toString(32);
+    // test("User is created with payload data", async () => {
+    //     const randomString = Math.random().toString(32);
 
-        const result = await request(app)
-            .post("/users/")
-            .send({
-                login: "user-" + randomString,
-                password: randomString,
-            });
+    //     const result = await request(app)
+    //         .post("/users/")
+    //         .send({
+    //             login: "user-" + randomString,
+    //             password: randomString,
+    //         });
 
-        console.log(randomString);
+    //     console.log(randomString);
 
-        expect(result.statusCode).toBe(200);
-    });
+    //     expect(result.statusCode).toBe(200);
+    // });
 });

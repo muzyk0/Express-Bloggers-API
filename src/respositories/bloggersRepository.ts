@@ -14,7 +14,7 @@ const bloggersCollection = db.collection<IBlogger>("bloggers");
 
 const m = new EntityManager(db);
 
-export const bloggersRepository = {
+export class BloggersRepository {
     // async getBloggers(withArchived: boolean = false): Promise<Blogger[]> {
     //     return bloggersCollection
     //         .find(withArchived ? {} : { deleted: { $exists: false } })
@@ -29,7 +29,7 @@ export const bloggersRepository = {
             searchNameTerm ? { name: { $regex: searchNameTerm } } : {},
             paginatorOptions
         );
-    },
+    }
     // async getBloggerById(
     //     id: number,
     //     withArchived: boolean = false
@@ -44,13 +44,13 @@ export const bloggersRepository = {
         withArchived: boolean = false
     ): Promise<IBlogger | null> {
         return m.findOne<IBlogger>("bloggers", { withArchived, id });
-    },
+    }
     async createBlogger(blogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(blogger, {
             forceServerObjectId: true,
         });
         return blogger;
-    },
+    }
     async updateBlogger(
         id: number,
         blogger: Pick<IBlogger, "name" | "youtubeUrl">
@@ -65,7 +65,7 @@ export const bloggersRepository = {
             { returnDocument: "after" }
         );
         return result.value;
-    },
+    }
     async deleteBloggerById(
         id: IBlogger["id"],
         options?: { softRemove: boolean }
@@ -76,5 +76,5 @@ export const bloggersRepository = {
         });
 
         return result;
-    },
-};
+    }
+}

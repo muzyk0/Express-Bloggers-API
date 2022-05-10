@@ -1,7 +1,9 @@
 import { PaginatorOptions } from "../lib/Paginator";
-import { usersRepository } from "../respositories/usersRepository";
+import { UsersRepository } from "../respositories/usersRepository";
 
-export const usersService = {
+export class UsersService {
+    constructor(private usersRepository: UsersRepository) {}
+
     async findUsers(
         {
             searchNameTerm,
@@ -10,9 +12,9 @@ export const usersService = {
         },
         paginatorOptions?: PaginatorOptions
     ) {
-        return usersRepository.getUsers(
+        return this.usersRepository.getUsers(
             { searchNameTerm, withArchived: false },
             paginatorOptions
         );
-    },
-};
+    }
+}

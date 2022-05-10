@@ -6,7 +6,7 @@ const usersCollection = db.collection("users");
 
 const m = new EntityManager(db);
 
-export const usersRepository = {
+export class UsersRepository {
     async getUsers(
         {
             searchNameTerm,
@@ -20,5 +20,5 @@ export const usersRepository = {
         const users = await m.find("users", { withArchived });
 
         return users;
-    },
-};
+    }
+}

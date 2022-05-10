@@ -9,7 +9,7 @@ const postsCollection = db.collection<IPost>("posts");
 
 const m = new EntityManager(db);
 
-export const postsRepository = {
+export class PostsRepository {
     async getPosts(
         {
             searchNameTerm,
@@ -33,18 +33,18 @@ export const postsRepository = {
             },
             paginatorOptions
         );
-    },
+    }
     async getPostById(
         id: number,
         withArchived: boolean = false
     ): Promise<IPost | null> {
         return m.findOne("posts", { withArchived, id });
-    },
+    }
     async createPost(post: OptionalId<IPost>): Promise<IPost | null> {
         await postsCollection.insertOne(post, { forceServerObjectId: true });
 
         return post;
-    },
+    }
     async updatePost(post: IPost): Promise<IPost | null> {
         const modifyPost = await postsCollection.findOneAndUpdate(
             { id: post.id },
@@ -55,7 +55,7 @@ export const postsRepository = {
         );
 
         return modifyPost.value;
-    },
+    }
     async deletePostById(
         id: IPost["id"],
         options?: { softRemove: boolean }
@@ -66,5 +66,5 @@ export const postsRepository = {
         });
 
         return result;
-    },
-};
+    }
+}

@@ -1,9 +1,14 @@
 import { IPost, PostInput } from "../entity/Post";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
-import { postsRepository } from "../respositories/postsRepository";
-import { bloggersService } from "./bloggersService";
+import { PostsRepository } from "../respositories/postsRepository";
+import { BloggersService } from "./bloggersService";
 
-export const postsService = {
+export class PostsService {
+    constructor(
+        public postsRepository: PostsRepository,
+        public bloggersService: BloggersService
+    ) {}
+
     async findPosts(
         {
             searchNameTerm,
@@ -11,16 +16,18 @@ export const postsService = {
         }: { searchNameTerm?: string; bloggerId?: number },
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<IPost>> {
-        return postsRepository.getPosts(
+        return this.postsRepository.getPosts(
             { searchNameTerm, bloggerId, withArchived: false },
             paginatorOptions
         );
-    },
+    }
     async findPostById(id: number): Promise<IPost | null> {
-        return postsRepository.getPostById(id);
-    },
+        return this.postsRepository.getPostById(id);
+    }
     async createPost(post: PostInput): Promise<IPost | null> {
-        const blogger = await bloggersService.findBloggerById(post.bloggerId);
+        const blogger = await this.bloggersService.findBloggerById(
+            post.bloggerId
+        );
 
         if (!blogger) {
             return null;
@@ -32,10 +39,12 @@ export const postsService = {
             id: +new Date(),
         };
 
-        return postsRepository.createPost(newPostInput);
-    },
+        return this.postsRepository.createPost(newPostInput);
+    }
     async updatePost(post: Required<PostInput>): Promise<IPost | null> {
-        const blogger = await bloggersService.findBloggerById(post.bloggerId);
+        const blogger = await this.bloggersService.findBloggerById(
+            post.bloggerId
+        );
 
         if (!blogger) {
             return null;
@@ -46,9 +55,9 @@ export const postsService = {
             bloggerName: blogger.name,
         };
 
-        return postsRepository.updatePost(newPost);
-    },
+        return this.postsRepository.updatePost(newPost);
+    }
     async deletePost(id: IPost["id"]): Promise<boolean> {
-        return postsRepository.deletePostById(id, { softRemove: false });
-    },
-};
+        return this.postsRepository.deletePostById(id, { softRemove: false });
+    }
+}

@@ -1,3 +1,7 @@
+import bcrypt from "bcrypt";
+import { ObjectId, WithId } from "mongodb";
+import { v4 } from "uuid";
+import { IUser, UserInput } from "../entity/User";
 import { PaginatorOptions } from "../lib/Paginator";
 import { UsersRepository } from "../respositories/usersRepository";
 
@@ -16,5 +20,22 @@ export class UsersService {
             { searchNameTerm, withArchived: false },
             paginatorOptions
         );
+    }
+
+    async createUser({ login, password }: UserInput) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user: WithId<IUser> = {
+            _id: new ObjectId(),
+            id: v4(),
+            login,
+            password: hashedPassword,
+        };
+
+        return this.usersRepository.createUser(user);
+    }
+
+    async deleteUser(id: IUser["id"]): Promise<boolean> {
+        return this.usersRepository.deleteUser(id, { softRemove: false });
     }
 }

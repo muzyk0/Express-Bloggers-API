@@ -33,7 +33,7 @@ export class PostsController {
         res.status(200).send(posts);
     }
 
-    // .get("/:id"
+    // .get("/:id")
     async getPostById(req: Request<{ id: string }>, res: Response) {
         const postId = req.params.id;
 

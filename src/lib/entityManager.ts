@@ -33,7 +33,7 @@ export class EntityManager {
 
         const result = await this.bd
             .collection<C>(collection)
-            .find(filter, { projection: { _id: false } })
+            .find(filter, { projection: { _id: false, password: false } })
             .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
             .limit(pageSize)
             .toArray();

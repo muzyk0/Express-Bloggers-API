@@ -16,10 +16,10 @@ export class User extends ValidationErrors {
     @IsString()
     id: Nullable<string> = null;
 
-    @Length(1, 30)
+    @Length(3, 10)
     @IsNotEmpty()
     login: Nullable<string> = null;
 
-    @Length(0, 100)
+    @Length(6, 20)
     password: Nullable<string> = null;
 }

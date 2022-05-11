@@ -33,12 +33,15 @@ export class UsersRepository {
         return users;
     }
 
-    async createUser(user: WithId<IUser>): Promise<IUser> {
+    async createUser(user: WithId<IUser>) {
         await usersCollection.insertOne(user, {
             forceServerObjectId: true,
         });
 
-        return user;
+        return usersCollection.findOne(
+            { id: user.id },
+            { projection: { _id: false, password: false } }
+        );
     }
 
     async deleteUser(id: IUser["id"], options?: { softRemove: boolean }) {

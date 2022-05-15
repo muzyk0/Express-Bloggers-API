@@ -4,11 +4,13 @@ import { PostsService } from "../domain/postsService";
 import { IBlogger } from "../entity/Blogger";
 import { Post } from "../entity/Post";
 import { Paginator } from "../lib/Paginator";
+import { CommentsService } from "../domain/commentsService";
 
 export class PostsController {
     constructor(
         private bloggersService: BloggersService,
-        private postsService: PostsService
+        private postsService: PostsService,
+        private commentsService: CommentsService
     ) {}
 
     // .get("/")
@@ -238,5 +240,71 @@ export class PostsController {
         }
 
         res.sendStatus(204);
+    }
+
+    // .get("/:id/comments")
+    async getPostComments(req: Request<{ id: string }>, res: Response) {
+        const { id } = req.params;
+
+        const postValidation = new Post();
+
+        postValidation.id = id;
+
+        const errors = await Post.validate(postValidation);
+
+        if (errors) {
+            res.status(400).send(errors);
+            return;
+        }
+
+        const comments = await this.commentsService.getPostComments(id);
+
+        if (!comments || comments.items.length === 0) {
+            const errors = Post.setErrors([
+                { field: "", message: "Comments doesn't exist" },
+            ]);
+            res.status(404).send(errors);
+            return;
+        }
+
+        res.status(200).send(comments);
+    }
+
+    // .post("/:id/comments")
+    async createPostComment(
+        req: Request<{ id: string }, {}, { content: string }>,
+        res: Response
+    ) {
+        const { id } = req.params;
+        const { content } = req.body;
+
+        const postValidation = new Post();
+
+        postValidation.id = id;
+        postValidation.content = content;
+
+        const errors = await Post.validate(postValidation);
+
+        if (errors) {
+            res.status(400).send(errors);
+            return;
+        }
+
+        const comment = await this.commentsService.createComment({
+            postId: id,
+            comment: content,
+            userId: req.ctx!.userId,
+            userLogin: req.ctx!.login,
+        });
+
+        if (!comment) {
+            const errors = Post.setErrors([
+                { field: "", message: "Comment doesn't created" },
+            ]);
+            res.status(404).send(errors);
+            return;
+        }
+
+        res.status(200).send(comment);
     }
 }

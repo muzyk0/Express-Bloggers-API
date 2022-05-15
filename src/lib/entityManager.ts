@@ -17,7 +17,8 @@ export class EntityManager {
         { page: pageNumber, pageSize }: PaginatorOptions = {
             page: 1,
             pageSize: 10,
-        }
+        },
+        projection?: { [key: string]: boolean }
     ): Promise<ResponseDataWithPaginator<C>> {
         const filter: Filter<C> = {
             ...(options as Filter<C>),
@@ -33,7 +34,9 @@ export class EntityManager {
 
         const result = await this.bd
             .collection<C>(collection)
-            .find(filter, { projection: { _id: false, password: false } })
+            .find(filter, {
+                projection: { _id: false, password: false, ...projection },
+            })
             .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
             .limit(pageSize)
             .toArray();

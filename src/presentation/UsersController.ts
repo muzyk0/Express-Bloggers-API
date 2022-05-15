@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { Paginator } from "../lib/Paginator";
 import { UsersService } from "../domain/usersService";
-import { UserDTO, User } from "../entity/User";
-import { PostsService } from "../domain/postsService";
+import { User } from "../entity/User";
+import { Paginator } from "../lib/Paginator";
 
 export class UsersController {
     constructor(public usersService: UsersService) {}

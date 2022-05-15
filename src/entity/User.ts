@@ -1,7 +1,6 @@
-import { IsInt, IsNotEmpty, IsString, Length } from "class-validator";
+import { IsNotEmpty, IsString, Length } from "class-validator";
 import { ValidationErrors } from "../lib/ValidationErrors";
 import { Nullable } from "../types/genericTypes";
-import { IBlogger } from "./Blogger";
 
 export interface IUser {
     id: string;

@@ -18,8 +18,6 @@ export class AuthController {
         const errors = await User.validate(validationUserData);
 
         if (errors) {
-            console.log(errors);
-
             res.status(401).send(errors);
             return;
         }

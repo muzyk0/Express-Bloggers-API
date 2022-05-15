@@ -1,8 +1,8 @@
 import { OptionalId } from "mongodb";
-import { db } from "./db";
 import { IPost } from "../entity/Post";
-import { EntityManager, TFilter } from "../lib/entityManager";
+import { EntityManager } from "../lib/entityManager";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
+import { db } from "./db";
 
 const postsCollection = db.collection<IPost>("posts");
 

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { Paginator } from "../lib/Paginator";
 import { BloggersService } from "../domain/bloggersService";
-import { Blogger, IBlogger } from "../entity/Blogger";
-import { Post } from "../entity/Post";
 import { PostsService } from "../domain/postsService";
+import { IBlogger } from "../entity/Blogger";
+import { Post } from "../entity/Post";
+import { Paginator } from "../lib/Paginator";
 
 export class PostsController {
     constructor(

@@ -3,6 +3,7 @@ import {
     ValidationError as ValidationErrorClass,
     ValidatorOptions,
 } from "class-validator";
+
 export interface ErrorMessage {
     message: string;
     field: string;
@@ -55,7 +56,7 @@ export class ValidationErrors {
                 errors
                     .map((e) =>
                         Object.entries(e.constraints ?? []).map(
-                            ([key, value]) => ({
+                            ([_key, value]) => ({
                                 field: e.property,
                                 message: value,
                             })

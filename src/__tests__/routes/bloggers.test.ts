@@ -1,7 +1,6 @@
-import request, { Request } from "supertest";
+import request from "supertest";
 import { app } from "../..";
 import { IBlogger } from "../../entity/Blogger";
-
 import { mongoDBClient } from "../../respositories/db";
 
 describe("Test the bloggers", () => {

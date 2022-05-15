@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, Length, Matches, IsString } from "class-validator";
+import { IsNotEmpty, IsString, Length, Matches } from "class-validator";
 import { ValidationErrors } from "../lib/ValidationErrors";
 import { Nullable } from "../types/genericTypes";
 

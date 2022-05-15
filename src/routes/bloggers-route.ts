@@ -1,6 +1,6 @@
 import express from "express";
 import { ioc } from "../ioCController";
-import { isBaseAuth } from "../middlewares/isAuthWithBase";
+import { isBaseAuth } from "../middlewares/isBaseAuth";
 
 export const bloggersRouter = express.Router();
 

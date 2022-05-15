@@ -1,8 +1,8 @@
+import { WithId } from "mongodb";
+import { IUser } from "../entity/User";
 import { EntityManager } from "../lib/entityManager";
 import { PaginatorOptions } from "../lib/Paginator";
 import { db } from "./db";
-import { User, UserDTO, UserInput, IUser } from "../entity/User";
-import { WithId } from "mongodb";
 
 const usersCollection = db.collection("users");
 

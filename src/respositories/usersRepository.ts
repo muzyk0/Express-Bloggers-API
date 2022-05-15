@@ -33,6 +33,10 @@ export class UsersRepository {
         return users;
     }
 
+    async getUserByLogin(login: string) {
+        return m.findOne<IUser>("users", { login: login });
+    }
+
     async createUser(user: WithId<IUser>) {
         await usersCollection.insertOne(user, {
             forceServerObjectId: true,

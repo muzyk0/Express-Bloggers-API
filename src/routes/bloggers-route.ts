@@ -1,6 +1,6 @@
 import express from "express";
 import { ioc } from "../ioCController";
-import { isAuthWithBase } from "../middlewares/isAuthWithBase";
+import { isBaseAuth } from "../middlewares/isAuthWithBase";
 
 export const bloggersRouter = express.Router();
 
@@ -16,21 +16,21 @@ bloggersRouter
     )
     .post(
         "/",
-        isAuthWithBase,
+        isBaseAuth,
         ioc.bloggerController.createNewBlogger.bind(ioc.bloggerController)
     )
     .post(
         "/:bloggerId/posts",
-        isAuthWithBase,
+        isBaseAuth,
         ioc.bloggerController.createNewBloggerPost.bind(ioc.bloggerController)
     )
     .put(
         "/:id",
-        isAuthWithBase,
+        isBaseAuth,
         ioc.bloggerController.updateBloggerPost.bind(ioc.bloggerController)
     )
     .delete(
         "/:id",
-        isAuthWithBase,
+        isBaseAuth,
         ioc.bloggerController.deleteBlogger.bind(ioc.bloggerController)
     );

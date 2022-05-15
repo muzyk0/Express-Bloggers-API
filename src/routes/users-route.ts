@@ -1,6 +1,6 @@
 import express from "express";
 import { ioc } from "../ioCController";
-import { isAuthWithBase } from "../middlewares/isAuthWithBase";
+import { isBaseAuth } from "../middlewares/isAuthWithBase";
 
 export const usersRoute = express.Router();
 
@@ -8,11 +8,11 @@ usersRoute
     .get("/", ioc.usersController.getAllUsers.bind(ioc.usersController))
     .post(
         "/",
-        isAuthWithBase,
+        isBaseAuth,
         ioc.usersController.createNewUser.bind(ioc.usersController)
     )
     .delete(
         "/:id",
-        isAuthWithBase,
+        isBaseAuth,
         ioc.usersController.deleteUser.bind(ioc.usersController)
     );

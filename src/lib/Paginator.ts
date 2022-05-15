@@ -52,11 +52,15 @@ export class Paginator extends ValidationErrors {
             this.PageSize = +PageSize[0];
         }
 
-        if (typeof SearchNameTerm === "string") {
+        if (SearchNameTerm && typeof SearchNameTerm === "string") {
             this.SearchNameTerm = SearchNameTerm;
         }
 
-        if (Array.isArray(SearchNameTerm) && SearchNameTerm[0]) {
+        if (
+            SearchNameTerm &&
+            Array.isArray(SearchNameTerm) &&
+            SearchNameTerm[0]
+        ) {
             this.SearchNameTerm = SearchNameTerm[0];
         }
     }

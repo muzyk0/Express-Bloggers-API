@@ -3,6 +3,7 @@ import { BloggersService } from "../domain/bloggersService";
 import { PostsService } from "../domain/postsService";
 import { IBlogger } from "../entity/Blogger";
 import { Post } from "../entity/Post";
+import { Comment } from "../entity/Comments";
 import { Paginator } from "../lib/Paginator";
 import { CommentsService } from "../domain/commentsService";
 
@@ -257,7 +258,20 @@ export class PostsController {
             return;
         }
 
-        const comments = await this.commentsService.getPostComments(id);
+        const paginatorValues = new Paginator(req.query);
+
+        const paginatorValidateErrors = await Paginator.validate(
+            paginatorValues
+        );
+
+        if (paginatorValidateErrors) {
+            return res.status(400).send(paginatorValidateErrors);
+        }
+
+        const comments = await this.commentsService.getPostComments(id, {
+            page: paginatorValues.PageNumber,
+            pageSize: paginatorValues.PageSize,
+        });
 
         if (!comments || comments.items.length === 0) {
             const errors = Post.setErrors([
@@ -278,7 +292,7 @@ export class PostsController {
         const { id } = req.params;
         const { content } = req.body;
 
-        const postValidation = new Post();
+        const postValidation = new Comment();
 
         postValidation.id = id;
         postValidation.content = content;

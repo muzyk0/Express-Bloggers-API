@@ -22,7 +22,7 @@ export class AuthController {
             return;
         }
 
-        const token = await this.authService.loginAndCheckCredential({
+        const token = await this.authService.login({
             login,
             password,
         });

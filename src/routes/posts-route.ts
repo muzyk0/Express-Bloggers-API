@@ -1,5 +1,6 @@
 import express from "express";
 import { ioc } from "../ioCController";
+import { isAuth } from "../middlewares/isAuth";
 import { isBaseAuth } from "../middlewares/isBaseAuth";
 
 export const postsRoute = express.Router();
@@ -22,4 +23,13 @@ postsRoute
         "/:id",
         isBaseAuth,
         ioc.postController.deleteBlogger.bind(ioc.postController)
+    )
+    .get(
+        "/:id/comments",
+        ioc.postController.getPostComments.bind(ioc.postController)
+    )
+    .post(
+        "/:id/comments",
+        isAuth,
+        ioc.postController.createPostComment.bind(ioc.postController)
     );

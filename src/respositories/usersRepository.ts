@@ -36,6 +36,10 @@ export class UsersRepository {
         return this.m.findOne<IUser>("users", { login: login });
     }
 
+    async getUserById(id: string) {
+        return this.m.findOne<IUser>("users", { id });
+    }
+
     async createUser(user: WithId<IUser>) {
         await usersCollection.insertOne(user, {
             forceServerObjectId: true,

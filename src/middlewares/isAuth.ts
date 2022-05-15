@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { BaseAuthPayload } from "../constants";
 import { ioc } from "../ioCController";
 
-export function isBaseAuth(req: Request, res: Response, next: NextFunction) {
+export const isAuth = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     if (!req.headers.authorization) {
         res.send(401);
         return;
@@ -15,15 +18,17 @@ export function isBaseAuth(req: Request, res: Response, next: NextFunction) {
 
     const token = req.headers.authorization.split(" ")[1];
 
-    const decodedBaseData = ioc.authService.decodeBaseAuth(token);
+    const user = await ioc.authService.checkCredentialWithBearerToken(token);
 
-    if (
-        (decodedBaseData.login !== BaseAuthPayload.login,
-        decodedBaseData.password !== BaseAuthPayload.password)
-    ) {
+    if (!user) {
         res.send(401);
         return;
     }
 
+    req.ctx = {
+        login: user.login,
+        userId: user.id,
+    };
+
     next();
-}
+};

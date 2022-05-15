@@ -26,6 +26,10 @@ export class UsersService {
         return this.usersRepository.getUserByLogin(login);
     }
 
+    async findUserById(id: string) {
+        return this.usersRepository.getUserById(id);
+    }
+
     async createUser({ login, password }: UserInput) {
         const hashedPassword = await bcrypt.hash(password, 10);
 

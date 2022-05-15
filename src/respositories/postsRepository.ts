@@ -6,9 +6,8 @@ import { db } from "./db";
 
 const postsCollection = db.collection<IPost>("posts");
 
-const m = new EntityManager(db);
-
 export class PostsRepository {
+    constructor(private m: EntityManager) {}
     async getPosts(
         {
             searchNameTerm,
@@ -21,7 +20,7 @@ export class PostsRepository {
         },
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<IPost>> {
-        return m.find(
+        return this.m.find(
             "posts",
             {
                 ...(searchNameTerm
@@ -37,7 +36,7 @@ export class PostsRepository {
         id: IPost["id"],
         withArchived: boolean = false
     ): Promise<IPost | null> {
-        return m.findOne("posts", { withArchived, id });
+        return this.m.findOne("posts", { withArchived, id });
     }
     async createPost(post: OptionalId<IPost>): Promise<IPost | null> {
         await postsCollection.insertOne(post, { forceServerObjectId: true });
@@ -59,7 +58,7 @@ export class PostsRepository {
         id: IPost["id"],
         options?: { softRemove: boolean }
     ): Promise<boolean> {
-        const result = await m.deleteOne("posts", {
+        const result = await this.m.deleteOne("posts", {
             id,
             softRemove: options?.softRemove,
         });

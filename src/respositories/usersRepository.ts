@@ -6,9 +6,8 @@ import { db } from "./db";
 
 const usersCollection = db.collection("users");
 
-const m = new EntityManager(db);
-
 export class UsersRepository {
+    constructor(private m: EntityManager) {}
     async getUsers(
         {
             searchNameTerm,
@@ -19,7 +18,7 @@ export class UsersRepository {
         },
         paginatorOptions?: PaginatorOptions
     ) {
-        const users = await m.find(
+        const users = await this.m.find(
             "users",
             {
                 ...(searchNameTerm
@@ -34,7 +33,7 @@ export class UsersRepository {
     }
 
     async getUserByLogin(login: string) {
-        return m.findOne<IUser>("users", { login: login });
+        return this.m.findOne<IUser>("users", { login: login });
     }
 
     async createUser(user: WithId<IUser>) {
@@ -49,7 +48,7 @@ export class UsersRepository {
     }
 
     async deleteUser(id: IUser["id"], options?: { softRemove: boolean }) {
-        return m.deleteOne("users", {
+        return this.m.deleteOne("users", {
             id,
             softRemove: options?.softRemove,
         });

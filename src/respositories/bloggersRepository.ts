@@ -12,9 +12,8 @@ import { Nullable } from "../types/genericTypes";
 
 const bloggersCollection = db.collection<IBlogger>("bloggers");
 
-const m = new EntityManager(db);
-
 export class BloggersRepository {
+    constructor(private m: EntityManager) {}
     // async getBloggers(withArchived: boolean = false): Promise<Blogger[]> {
     //     return bloggersCollection
     //         .find(withArchived ? {} : { deleted: { $exists: false } })
@@ -24,7 +23,7 @@ export class BloggersRepository {
         { searchNameTerm }: { searchNameTerm: Nullable<string> },
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<IBlogger>> {
-        return m.find<IBlogger>(
+        return this.m.find<IBlogger>(
             "bloggers",
             searchNameTerm ? { name: { $regex: searchNameTerm } } : {},
             paginatorOptions
@@ -43,7 +42,7 @@ export class BloggersRepository {
         id: IBlogger["id"],
         withArchived: boolean = false
     ): Promise<IBlogger | null> {
-        return m.findOne<IBlogger>("bloggers", { withArchived, id });
+        return this.m.findOne<IBlogger>("bloggers", { withArchived, id });
     }
     async createBlogger(blogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(blogger, {
@@ -70,7 +69,7 @@ export class BloggersRepository {
         id: IBlogger["id"],
         options?: { softRemove: boolean }
     ): Promise<boolean> {
-        const result = await m.deleteOne("bloggers", {
+        const result = await this.m.deleteOne("bloggers", {
             id,
             softRemove: options?.softRemove,
         });

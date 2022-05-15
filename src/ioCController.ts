@@ -9,10 +9,14 @@ import { PostsService } from "./domain/postsService";
 import { PostsController } from "./presentation/PostsController";
 import { AuthService } from "./domain/authService";
 import { AuthController } from "./presentation/AuthController";
+import { EntityManager } from "./lib/entityManager";
+import { db } from "./respositories/db";
 
-const usersRepository = new UsersRepository();
-const postRepository = new PostsRepository();
-const bloggerRepository = new BloggersRepository();
+const m = new EntityManager(db);
+
+const usersRepository = new UsersRepository(m);
+const postRepository = new PostsRepository(m);
+const bloggerRepository = new BloggersRepository(m);
 
 const usersService = new UsersService(usersRepository);
 const bloggerService = new BloggersService(bloggerRepository);

@@ -8,7 +8,7 @@ export function isBaseAuth(req: Request, res: Response, next: NextFunction) {
         return;
     }
 
-    if (req.headers.authorization.split(" ")[0] !== "Basic") {
+    if (req.headers.authorization.split(" ")[0] !== "Bearer") {
         res.send(401);
         return;
     }

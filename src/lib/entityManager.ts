@@ -6,7 +6,7 @@ export type TFilter<T = any> = {
     softRemove?: boolean;
 } & Filter<T>;
 
-type TCollection = "bloggers" | "posts" | "users" | 'comments';
+type TCollection = "bloggers" | "posts" | "users" | "comments";
 
 export class EntityManager {
     constructor(protected bd: Db) {}

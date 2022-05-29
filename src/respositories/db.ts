@@ -20,7 +20,7 @@ export const connection = mongoose.createConnection(MONGO_URI);
 export async function runDB() {
     try {
         // Connect the client to the server
-        await mongoose.connect(MONGO_URI, {sslKey: credentials,});
+        await mongoose.connect(MONGO_URI, { sslKey: credentials });
         // Establish and verify connection
         await mongoDBClient.connect();
         await mongoDBClient.db("bloggers").command({ ping: 1 });

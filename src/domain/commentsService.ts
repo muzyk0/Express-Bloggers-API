@@ -55,34 +55,37 @@ export class CommentsService implements IPostsService {
         return await this.commentRepository.createPostComment(newComment);
     }
     async updateComment(comment: UpdatePostQuery) {
-        const updatedComment = await this.commentRepository.updatePostComment(comment);
+        const updatedComment = await this.commentRepository.updatePostComment(
+            comment
+        );
 
         if (!updatedComment) {
             return null;
         }
 
-        return updatedComment
+        return updatedComment;
     }
 
     async removePostComment(commentId: string) {
-        const updatedComment = await this.commentRepository.removePostComment(commentId);
+        const updatedComment = await this.commentRepository.removePostComment(
+            commentId
+        );
 
-
-        return updatedComment
+        return updatedComment;
     }
 
     async checkCredentials(commentId: string, userId: string) {
-        const comment = await this.commentRepository.getComment({ commentId })
+        const comment = await this.commentRepository.getComment({ commentId });
 
         if (!comment) {
-            return false
+            return false;
         }
 
         if (comment.userId !== userId) {
-            return false
+            return false;
         }
 
-        return true
+        return true;
     }
 }
 
@@ -91,8 +94,8 @@ interface IPostsService {
         postId: string
     ): Promise<ResponseDataWithPaginator<CommentDTO> | null>;
     createComment(data: CreatePostQuery): Promise<CommentDTO | null>;
-    removePostComment(commentId: string): Promise<boolean>
-    checkCredentials(commentId: string, userId: string): Promise<boolean>
+    removePostComment(commentId: string): Promise<boolean>;
+    checkCredentials(commentId: string, userId: string): Promise<boolean>;
 }
 
 interface CreatePostQuery {

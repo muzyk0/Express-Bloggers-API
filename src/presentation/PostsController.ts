@@ -268,7 +268,7 @@ export class PostsController {
             return res.status(400).send(paginatorValidateErrors);
         }
 
-        const post = await this.postsService.findPostById(id)
+        const post = await this.postsService.findPostById(id);
 
         if (!post) {
             const errors = Post.setErrors([

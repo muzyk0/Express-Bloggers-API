@@ -16,7 +16,10 @@ export class CommentsRepository implements ICommentsRepository {
         commentId?: string;
         withArchived?: boolean;
     }): Promise<CommentDTO | null> {
-        const result = await CommentsModel.findOne({id: commentId}, {postId: 0});
+        const result = await CommentsModel.findOne(
+            { id: commentId },
+            { postId: 0 }
+        );
 
         return result;
     }
@@ -65,7 +68,10 @@ export class CommentsRepository implements ICommentsRepository {
         commentId,
         comment,
     }: UpdatePostQuery): Promise<CommentDTO | null> {
-        await commentsCollection.updateOne({ id: commentId }, { $set: {content: comment} });
+        await commentsCollection.updateOne(
+            { id: commentId },
+            { $set: { content: comment } }
+        );
 
         const updatedComment: CommentDTO | null =
             await commentsCollection.findOne(
@@ -81,9 +87,9 @@ export class CommentsRepository implements ICommentsRepository {
     }
 
     async removePostComment(commentId: string): Promise<boolean> {
-        const result = await CommentsModel.deleteOne({id: commentId})
+        const result = await CommentsModel.deleteOne({ id: commentId });
 
-        return result.deletedCount > 0
+        return result.deletedCount > 0;
     }
 }
 
@@ -97,7 +103,7 @@ interface ICommentsRepository {
 
     updatePostComment(comment: UpdatePostQuery): Promise<CommentDTO | null>;
 
-    removePostComment(commentId: string): Promise<boolean>
+    removePostComment(commentId: string): Promise<boolean>;
 }
 
 type UpdatePostQuery = {

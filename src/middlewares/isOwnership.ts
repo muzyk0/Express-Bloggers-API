@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { commentsService } from "../ioCController";
 
-export const isOwnership = async (req: Request, res: Response, next: NextFunction) => {
-    const {id} = req.params;
+export const isOwnership = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { id } = req.params;
 
     const comment = await commentsService.getComment(id);
 

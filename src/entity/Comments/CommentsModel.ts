@@ -11,4 +11,8 @@ export const commentsSchema = new mongoose.Schema<IComment>({
     postId: { type: String, required: true },
 });
 
-export const CommentsModel = connection.model<IComment>("comments", commentsSchema, 'comments');
+export const CommentsModel = connection.model<IComment>(
+    "comments",
+    commentsSchema,
+    "comments"
+);

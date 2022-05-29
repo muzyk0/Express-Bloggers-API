@@ -268,6 +268,16 @@ export class PostsController {
             return res.status(400).send(paginatorValidateErrors);
         }
 
+        const post = await this.postsService.findPostById(id)
+
+        if (!post) {
+            const errors = Post.setErrors([
+                { field: "", message: "Post doesn't exist" },
+            ]);
+            res.status(404).send(errors);
+            return;
+        }
+
         const comments = await this.commentsService.getPostComments(id, {
             page: paginatorValues.PageNumber,
             pageSize: paginatorValues.PageSize,

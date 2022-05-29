@@ -1,25 +1,27 @@
+import { OptionalId } from "mongodb";
+
+import { CommentDTO, IComment } from "../entity/Comments";
+import { CommentsModel } from "../entity/Comments/CommentsModel";
 import { EntityManager } from "../lib/entityManager";
-import { CommentDTO, IComment } from "../entity/Comments/Comments";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { db } from "./db";
-import { OptionalId } from "mongodb";
-import { CommentsModel } from "../entity/Comments/CommentsModel";
 
 const commentsCollection = db.collection<IComment>("posts");
 
 export class CommentsRepository implements ICommentsRepository {
     constructor(private m: EntityManager) {}
-    async getComment(
-        {
-            commentId,
-        }: {
-            commentId?: string;
-            withArchived?: boolean;
-        },
-    ): Promise<CommentDTO> {
-        const result = await CommentsModel.findOne({id: commentId}, {postId: 0})
+    async getComment({
+        commentId,
+    }: {
+        commentId?: string;
+        withArchived?: boolean;
+    }): Promise<CommentDTO> {
+        const result = await CommentsModel.findOne(
+            { id: commentId },
+            { postId: 0 }
+        );
 
-        return result as CommentDTO
+        return result as CommentDTO;
 
         // return this.m.findOne(
         //     "posts",

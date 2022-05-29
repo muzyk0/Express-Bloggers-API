@@ -1,6 +1,5 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { MONGO_URI } from "../constants";
-import * as mongoose from "mongoose";
 
 const credentials: string | undefined = undefined;
 

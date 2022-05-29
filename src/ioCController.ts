@@ -48,5 +48,5 @@ export const ioc = {
     bloggerController,
     authService,
     authController,
-    commentsController
+    commentsController,
 };

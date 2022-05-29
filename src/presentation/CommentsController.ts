@@ -68,6 +68,14 @@ export class CommentsController {
             }
         }
 
+        const isOwnership = this.commentsService.checkCredentials(id, req.ctx!.userId)
+
+        if (!isOwnership) {
+            res.sendStatus(403)
+            return;
+        }
+
+
         const comment = await this.commentsService.updateComment({
             commentId: id,
             comment: content,

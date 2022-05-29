@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { IBlogger } from "../entity/Blogger";
+import { IBlogger } from "../entity/Blogger/Blogger";
 import { EntityManager } from "../lib/entityManager";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { Nullable } from "../types/genericTypes";

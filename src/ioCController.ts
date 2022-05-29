@@ -13,6 +13,7 @@ import { EntityManager } from "./lib/entityManager";
 import { db } from "./respositories/db";
 import { CommentsRepository } from "./respositories/commentsRepository";
 import { CommentsService } from "./domain/commentsService";
+import { CommentsController } from "./presentation/CommentsController";
 
 const m = new EntityManager(db);
 
@@ -39,6 +40,7 @@ const postController = new PostsController(
 );
 const bloggerController = new BloggersController(bloggerService, postService);
 const authController = new AuthController(authService);
+const commentsController = new CommentsController(commentsService);
 
 export const ioc = {
     usersController,
@@ -46,4 +48,5 @@ export const ioc = {
     bloggerController,
     authService,
     authController,
+    commentsController
 };

@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { CommentDTO, IComment } from "../entity/Comments";
+import { CommentDTO, IComment } from "../entity/Comments/Comments";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { CommentsRepository } from "../respositories/commentsRepository";
 import { PostsService } from "./postsService";
@@ -11,6 +11,13 @@ export class CommentsService implements IPostsService {
         public usersService: UsersService,
         public commentRepository: CommentsRepository
     ) {}
+    async getComment(
+        commentId: string
+    ): Promise<CommentDTO | null> {
+        return this.commentRepository.getComment(
+            {commentId, withArchived: false},
+        );
+    }
     async getPostComments(
         postId: string,
         paginatorOptions?: PaginatorOptions

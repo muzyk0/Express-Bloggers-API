@@ -1,4 +1,4 @@
-import { IBlogger } from "../entity/Blogger";
+import { IBlogger } from "../entity/Blogger/Blogger";
 import { IPost, PostInput } from "../entity/Post";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { PostsRepository } from "../respositories/postsRepository";

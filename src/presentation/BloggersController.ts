@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Paginator } from "../lib/Paginator";
 import { BloggersService } from "../domain/bloggersService";
-import { Blogger } from "../entity/Blogger";
+import { Blogger } from "../entity/Blogger/Blogger";
 import { Post } from "../entity/Post";
 import { PostsService } from "../domain/postsService";
 

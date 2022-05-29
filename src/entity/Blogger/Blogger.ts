@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, Length, Matches } from "class-validator";
-import { ValidationErrors } from "../lib/ValidationErrors";
-import { Nullable } from "../types/genericTypes";
+import { ValidationErrors } from "../../lib/ValidationErrors";
+import { Nullable } from "../../types/genericTypes";
 
 export const youtubeURLPattern =
     /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;

@@ -1,4 +1,4 @@
-import { IBlogger } from "../entity/Blogger";
+import { IBlogger } from "../entity/Blogger/Blogger";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { BloggersRepository } from "../respositories/bloggersRepository";
 import { v4 } from "uuid";

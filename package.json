@@ -8,8 +8,7 @@
     "scripts": {
         "build": "tsc",
         "start": "node dist/server.js",
-        "dev": "nodemon --inspect dist/index.js",
-        "dev2": "nodemon --inspect dist/server.js",
+        "dev": "nodemon --inspect dist/server.js",
         "test": "tsc && jest",
         "test:watch": "tsc && jest --watch",
         "watchAndRun": "concurrently \"tsc -w\" \"nodemon --inspect dist/server.js\"",
@@ -30,6 +29,7 @@
         "inversify": "^6.0.1",
         "jsonwebtoken": "^8.5.1",
         "mongodb": "^4.5.0",
+        "mongoose": "^6.3.4",
         "uuid": "^8.3.2"
     },
     "devDependencies": {

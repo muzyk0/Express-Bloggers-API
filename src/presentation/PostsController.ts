@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { BloggersService } from "../domain/bloggersService";
 import { PostsService } from "../domain/postsService";
-import { IBlogger } from "../entity/Blogger";
+import { IBlogger } from "../entity/Blogger/Blogger";
 import { Post } from "../entity/Post";
-import { Comment } from "../entity/Comments";
+import { Comment } from "../entity/Comments/Comments";
 import { Paginator } from "../lib/Paginator";
 import { CommentsService } from "../domain/commentsService";
 

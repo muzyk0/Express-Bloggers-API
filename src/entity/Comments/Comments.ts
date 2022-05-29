@@ -1,6 +1,6 @@
 import { IsDate, IsNotEmpty, IsString, Length } from "class-validator";
-import { ValidationErrors } from "../lib/ValidationErrors";
-import { Nullable } from "../types/genericTypes";
+import { ValidationErrors } from "../../lib/ValidationErrors";
+import { Nullable } from "../../types/genericTypes";
 
 export interface CommentInput {
     content: string;

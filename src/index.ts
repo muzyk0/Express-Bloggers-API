@@ -7,6 +7,7 @@ import { authRoute } from "./routes/auth-route";
 import { bloggersRouter } from "./routes/bloggers-route";
 import { postsRoute } from "./routes/posts-route";
 import { usersRoute } from "./routes/users-route";
+import { commentsRoute } from "./routes/comments-route";
 
 export const app = express();
 app.use(cors());
@@ -19,6 +20,7 @@ try {
         app.use(`${BASE_URL}/posts`, postsRoute);
         app.use(`${BASE_URL}/users`, usersRoute);
         app.use(`${BASE_URL}/auth`, authRoute);
+        app.use(`${BASE_URL}/comments`, commentsRoute);
     })();
 } catch (error) {
     console.error(error);

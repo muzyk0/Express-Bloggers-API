@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, Length } from "class-validator";
 import { ValidationErrors } from "../lib/ValidationErrors";
 import { Nullable } from "../types/genericTypes";
-import { IBlogger } from "./Blogger";
+import { IBlogger } from "./Blogger/Blogger";
 
 export interface IPost {
     id: string;

@@ -273,7 +273,7 @@ export class PostsController {
             pageSize: paginatorValues.PageSize,
         });
 
-        if (!comments || comments.items.length === 0) {
+        if (!comments) {
             const errors = Post.setErrors([
                 { field: "", message: "Comments doesn't exist" },
             ]);
@@ -319,6 +319,6 @@ export class PostsController {
             return;
         }
 
-        res.status(200).send(comment);
+        res.status(201).send(comment);
     }
 }

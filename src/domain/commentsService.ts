@@ -70,6 +70,20 @@ export class CommentsService implements IPostsService {
 
         return updatedComment
     }
+
+    async checkCredentials(commentId: string, userId: string) {
+        const comment = await this.commentRepository.getComment({ commentId })
+
+        if (!comment) {
+            return false
+        }
+
+        if (comment.userId !== userId) {
+            return false
+        }
+
+        return true
+    }
 }
 
 interface IPostsService {
@@ -78,6 +92,7 @@ interface IPostsService {
     ): Promise<ResponseDataWithPaginator<CommentDTO> | null>;
     createComment(data: CreatePostQuery): Promise<CommentDTO | null>;
     removePostComment(commentId: string): Promise<boolean>
+    checkCredentials(commentId: string, userId: string): Promise<boolean>
 }
 
 interface CreatePostQuery {

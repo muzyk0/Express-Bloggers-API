@@ -113,13 +113,6 @@ export class CommentsController {
             }
         }
 
-        const isOwnership = this.commentsService.checkCredentials(commentId, req.ctx!.userId)
-
-        if (!isOwnership) {
-            res.sendStatus(403)
-            return;
-        }
-
         const isDeleted = await this.commentsService.removePostComment(commentId);
 
         if (!isDeleted) {

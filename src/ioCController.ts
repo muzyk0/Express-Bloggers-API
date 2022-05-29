@@ -26,7 +26,7 @@ const usersService = new UsersService(usersRepository);
 const bloggerService = new BloggersService(bloggerRepository);
 const postService = new PostsService(postRepository, bloggerService);
 const authService = new AuthService(usersService);
-const commentsService = new CommentsService(
+export const commentsService = new CommentsService(
     postService,
     usersService,
     commentsRepository

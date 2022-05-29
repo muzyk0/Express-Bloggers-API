@@ -89,7 +89,7 @@ export class CommentsController {
     }
 
     // // .delete("/:id")
-    async deleteBlogger(req: Request<{ id: string }>, res: Response) {
+    async deleteComment(req: Request<{ id: string }>, res: Response) {
         const commentId = req.params.id;
 
         {
@@ -103,6 +103,13 @@ export class CommentsController {
                 res.status(400).send(errors);
                 return;
             }
+        }
+
+        const isOwnership = this.commentsService.checkCredentials(commentId, req.ctx!.userId)
+
+        if (!isOwnership) {
+            res.sendStatus(403)
+            return;
         }
 
         const isDeleted = await this.commentsService.removePostComment(commentId);

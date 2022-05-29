@@ -10,5 +10,5 @@ commentsRoute
     .delete(
         "/:id",
         isAuth,
-        ioc.commentsController.deleteBlogger.bind(ioc.postController)
+        ioc.commentsController.deleteComment.bind(ioc.postController)
     );

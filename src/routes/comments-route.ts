@@ -6,13 +6,9 @@ export const commentsRoute = express.Router();
 
 commentsRoute
     .get("/:id", ioc.commentsController.getCommentById.bind(ioc.postController))
-    .put(
-        "/:id",
-        isAuth,
-        ioc.postController.updatePost.bind(ioc.postController)
-    )
+    .put("/:id", isAuth, ioc.commentsController.updateComment.bind(ioc.postController))
     .delete(
         "/:id",
         isAuth,
-        ioc.postController.deleteBlogger.bind(ioc.postController)
-    )
+        ioc.commentsController.deleteBlogger.bind(ioc.postController)
+    );

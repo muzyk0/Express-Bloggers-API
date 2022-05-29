@@ -54,25 +54,22 @@ export class CommentsService implements IPostsService {
 
         return await this.commentRepository.createPostComment(newComment);
     }
-    // async updatePost(post: Required<PostInput>): Promise<IPost | null> {
-    //     const blogger = await this.bloggersService.findBloggerById(
-    //         post.bloggerId
-    //     );
+    async updateComment(comment: UpdatePostQuery) {
+        const updatedComment = await this.commentRepository.updatePostComment(comment);
 
-    //     if (!blogger) {
-    //         return null;
-    //     }
+        if (!updatedComment) {
+            return null;
+        }
 
-    //     const newPost: IPost = {
-    //         ...post,
-    //         bloggerName: blogger.name,
-    //     };
+        return updatedComment
+    }
 
-    //     return this.postsRepository.updatePost(newPost);
-    // }
-    // async deletePost(id: IPost["id"]): Promise<boolean> {
-    //     return this.postsRepository.deletePostById(id, { softRemove: false });
-    // }
+    async removePostComment(commentId: string) {
+        const updatedComment = await this.commentRepository.removePostComment(commentId);
+
+
+        return updatedComment
+    }
 }
 
 interface IPostsService {
@@ -80,6 +77,7 @@ interface IPostsService {
         postId: string
     ): Promise<ResponseDataWithPaginator<CommentDTO> | null>;
     createComment(data: CreatePostQuery): Promise<CommentDTO | null>;
+    removePostComment(commentId: string): Promise<boolean>
 }
 
 interface CreatePostQuery {
@@ -88,3 +86,8 @@ interface CreatePostQuery {
     userLogin: string;
     comment: string;
 }
+
+type UpdatePostQuery = {
+    commentId: string;
+    comment: string;
+};

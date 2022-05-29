@@ -6,7 +6,7 @@ import { EntityManager } from "../lib/entityManager";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { db } from "./db";
 
-const commentsCollection = db.collection<IComment>("posts");
+const commentsCollection = db.collection<IComment>("comments");
 
 export class CommentsRepository implements ICommentsRepository {
     constructor(private m: EntityManager) {}
@@ -15,23 +15,10 @@ export class CommentsRepository implements ICommentsRepository {
     }: {
         commentId?: string;
         withArchived?: boolean;
-    }): Promise<CommentDTO> {
-        const result = await CommentsModel.findOne(
-            { id: commentId },
-            { postId: 0 }
-        );
+    }): Promise<CommentDTO | null> {
+        const result = await CommentsModel.findOne({id: commentId}, {postId: 0});
 
-        return result as CommentDTO;
-
-        // return this.m.findOne(
-        //     "posts",
-        //     {
-        //         ...(commentId ? { commentId } : {}),
-        //         withArchived,
-        //     },
-        //     paginatorOptions,
-        //     { commentId: false }
-        // );
+        return result;
     }
 
     async getPostComments(
@@ -45,7 +32,7 @@ export class CommentsRepository implements ICommentsRepository {
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<CommentDTO>> {
         return this.m.find(
-            "posts",
+            "comments",
             {
                 ...(postId ? { postId: postId } : {}),
                 withArchived,
@@ -73,6 +60,31 @@ export class CommentsRepository implements ICommentsRepository {
 
         return newComment;
     }
+
+    async updatePostComment({
+        commentId,
+        comment,
+    }: UpdatePostQuery): Promise<CommentDTO | null> {
+        await commentsCollection.updateOne({ id: commentId }, { $set: {content: comment} });
+
+        const updatedComment: CommentDTO | null =
+            await commentsCollection.findOne(
+                { id: commentId },
+                { projection: { _id: false, postId: false } }
+            );
+
+        if (!updatedComment) {
+            return null;
+        }
+
+        return updatedComment;
+    }
+
+    async removePostComment(commentId: string): Promise<boolean> {
+        const result = await CommentsModel.deleteOne({id: commentId})
+
+        return result.deletedCount > 0
+    }
 }
 
 interface ICommentsRepository {
@@ -82,4 +94,13 @@ interface ICommentsRepository {
     ): Promise<ResponseDataWithPaginator<CommentDTO>>;
 
     createPostComment(comment: IComment): Promise<CommentDTO | null>;
+
+    updatePostComment(comment: UpdatePostQuery): Promise<CommentDTO | null>;
+
+    removePostComment(commentId: string): Promise<boolean>
 }
+
+type UpdatePostQuery = {
+    commentId: string;
+    comment: string;
+};

@@ -1,5 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { MONGO_URI } from "../constants";
+import mongoose from "mongoose";
 
 const credentials: string | undefined = undefined;
 
@@ -14,10 +15,12 @@ export const mongoDBClient = new MongoClient(MONGO_URI, {
  */
 export const db = mongoDBClient.db("bloggers");
 
+export const connection = mongoose.createConnection(MONGO_URI);
+
 export async function runDB() {
     try {
-        // Contect the client to the server
-        // await mongoose.connect(MONGO_URI, {sslKey: credentials,});
+        // Connect the client to the server
+        await mongoose.connect(MONGO_URI, {sslKey: credentials,});
         // Establish and verify connection
         await mongoDBClient.connect();
         await mongoDBClient.db("bloggers").command({ ping: 1 });

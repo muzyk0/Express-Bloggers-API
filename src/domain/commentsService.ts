@@ -1,10 +1,10 @@
 import { v4 } from "uuid";
 
-import { CommentDTO, IComment } from "../entity/Comments";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { CommentsRepository } from "../respositories/commentsRepository";
 import { PostsService } from "./postsService";
 import { UsersService } from "./usersService";
+import {CommentDTO, IComment} from "../entity/Comments/Comments";
 
 export class CommentsService implements IPostsService {
     constructor(

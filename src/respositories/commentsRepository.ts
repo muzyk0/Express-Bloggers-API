@@ -1,10 +1,10 @@
 import { OptionalId } from "mongodb";
 
-import { CommentDTO, IComment } from "../entity/Comments";
 import { CommentsModel } from "../entity/Comments/CommentsModel";
 import { EntityManager } from "../lib/entityManager";
 import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
 import { db } from "./db";
+import {CommentDTO, IComment} from "../entity/Comments/Comments";
 
 const commentsCollection = db.collection<IComment>("comments");
 

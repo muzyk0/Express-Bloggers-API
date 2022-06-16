@@ -4,6 +4,7 @@ import { runDB } from "./respositories/db";
 
 try {
     (async () => {
+        debugger
         await runDB();
 
         app.listen(PORT, async () => {

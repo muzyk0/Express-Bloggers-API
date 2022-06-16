@@ -24,6 +24,13 @@ export async function runDB() {
         // Establish and verify connection
         await mongoDBClient.connect();
         await mongoDBClient.db("bloggers").command({ ping: 1 });
+
+        // const result = await db.collection('comments').find({}).toArray()
+        // const result2 = await db.collection('bloggers').find({}).toArray()
+
+            // console.log(result)
+            // console.log(result2)
+
         console.log("Connected successfully to mongo server");
     } catch {
         // Ensures that the client will close when you finish/error

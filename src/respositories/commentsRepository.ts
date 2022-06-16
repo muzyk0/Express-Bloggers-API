@@ -16,10 +16,12 @@ export class CommentsRepository implements ICommentsRepository {
         commentId?: string;
         withArchived?: boolean;
     }): Promise<CommentDTO | null> {
-        const result = await CommentsModel.findOne(
-            { id: commentId },
-            { postId: 0 }
-        );
+        // const result = await CommentsModel.findOne(
+        //     { id: 'c1303e6f-92c4-4287-afdd-c2389ef4bb79' },
+        //     { postId: 0 }
+        // );
+
+        const result = await commentsCollection.findOne({id: commentId}, {projection: {postId: false}})
 
         return result;
     }

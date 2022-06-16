@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { UsersService } from "../domain/usersService";
-import { User } from "../entity/User";
-import { Paginator } from "../lib/Paginator";
+import { Request, Response } from 'express';
+import { UsersService } from '../domain/usersService';
+import { User } from '../entity/User';
+import { Paginator } from '../lib/Paginator';
 
 export class UsersController {
     constructor(public usersService: UsersService) {}
@@ -73,7 +73,7 @@ export class UsersController {
             res.status(404).send(
                 User.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `User doesn't deleted`,
                     },
                 ])

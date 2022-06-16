@@ -1,9 +1,9 @@
-import { IBlogger } from "../entity/Blogger/Blogger";
-import { IPost, PostInput } from "../entity/Post";
-import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
-import { PostsRepository } from "../respositories/postsRepository";
-import { BloggersService } from "./bloggersService";
-import { v4 } from "uuid";
+import { IBlogger } from '../entity/Blogger/Blogger';
+import { IPost, PostInput } from '../entity/Post';
+import { PaginatorOptions, ResponseDataWithPaginator } from '../lib/Paginator';
+import { PostsRepository } from '../respositories/postsRepository';
+import { BloggersService } from './bloggersService';
+import { v4 } from 'uuid';
 
 export class PostsService {
     constructor(
@@ -15,7 +15,7 @@ export class PostsService {
         {
             searchNameTerm,
             bloggerId,
-        }: { searchNameTerm?: string; bloggerId?: IBlogger["id"] },
+        }: { searchNameTerm?: string; bloggerId?: IBlogger['id'] },
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<IPost>> {
         return this.postsRepository.getPosts(
@@ -23,7 +23,7 @@ export class PostsService {
             paginatorOptions
         );
     }
-    async findPostById(id: IPost["id"]): Promise<IPost | null> {
+    async findPostById(id: IPost['id']): Promise<IPost | null> {
         return this.postsRepository.getPostById(id);
     }
     async createPost(post: PostInput): Promise<IPost | null> {
@@ -59,7 +59,7 @@ export class PostsService {
 
         return this.postsRepository.updatePost(newPost);
     }
-    async deletePost(id: IPost["id"]): Promise<boolean> {
+    async deletePost(id: IPost['id']): Promise<boolean> {
         return this.postsRepository.deletePostById(id, { softRemove: false });
     }
 }

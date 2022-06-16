@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { Post } from "../entity/Post";
-import { CommentsService } from "../domain/commentsService";
-import { Comment } from "../entity/Comments/Comments";
+import { Request, Response } from 'express';
+import { Post } from '../entity/Post';
+import { CommentsService } from '../domain/commentsService';
+import { Comment } from '../entity/Comments/Comments';
 
 export class CommentsController {
     constructor(private commentsService: CommentsService) {}
@@ -29,7 +29,7 @@ export class CommentsController {
             res.status(404).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Comment doesn't exist`,
                     },
                 ])
@@ -87,7 +87,7 @@ export class CommentsController {
             res.status(404).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Comment doesn't exist`,
                     },
                 ])
@@ -123,7 +123,7 @@ export class CommentsController {
             res.status(404).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Comment doesn't deleted`,
                     },
                 ])

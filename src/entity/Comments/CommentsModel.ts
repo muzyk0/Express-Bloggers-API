@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import { IComment } from "./Comments";
-import { connection } from "../../respositories/db";
+import mongoose from 'mongoose';
+import { IComment } from './Comments';
+import { connection } from '../../respositories/db';
 
 export const commentsSchema = new mongoose.Schema<IComment>({
     id: { type: String, required: true },
@@ -12,7 +12,7 @@ export const commentsSchema = new mongoose.Schema<IComment>({
 });
 
 export const CommentsModel = connection.model<IComment>(
-    "comments",
+    'comments',
     commentsSchema,
-    "comments"
+    'comments'
 );

@@ -12,7 +12,8 @@
         "test": "tsc && jest",
         "test:watch": "tsc && jest --watch",
         "watchAndRun": "concurrently \"tsc -w\" \"nodemon --inspect dist/server.js\"",
-        "watch": "tsc -w"
+        "watch": "tsc -w",
+        "prettier": "prettier --write ."
     },
     "author": "muzyk0 <ru9art@gmail.com>",
     "license": "ISC",

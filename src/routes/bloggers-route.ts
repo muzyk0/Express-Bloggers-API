@@ -1,13 +1,13 @@
-import express from "express";
-import { ioc } from "../ioCController";
-import { isBaseAuth } from "../middlewares/isBaseAuth";
+import express from 'express';
+import { ioc } from '../ioCController';
+import { isBaseAuth } from '../middlewares/isBaseAuth';
 
 export const bloggersRouter = express.Router();
 
 bloggersRouter
     .get(`/`, ioc.bloggerController.getAllBloggers.bind(ioc.bloggerController))
     .get(
-        "/:id",
+        '/:id',
         ioc.bloggerController.getOneBlogger.bind(ioc.bloggerController)
     )
     .get(
@@ -15,22 +15,22 @@ bloggersRouter
         ioc.bloggerController.getBloggerPosts.bind(ioc.bloggerController)
     )
     .post(
-        "/",
+        '/',
         isBaseAuth,
         ioc.bloggerController.createNewBlogger.bind(ioc.bloggerController)
     )
     .post(
-        "/:bloggerId/posts",
+        '/:bloggerId/posts',
         isBaseAuth,
         ioc.bloggerController.createNewBloggerPost.bind(ioc.bloggerController)
     )
     .put(
-        "/:id",
+        '/:id',
         isBaseAuth,
         ioc.bloggerController.updateBloggerPost.bind(ioc.bloggerController)
     )
     .delete(
-        "/:id",
+        '/:id',
         isBaseAuth,
         ioc.bloggerController.deleteBlogger.bind(ioc.bloggerController)
     );

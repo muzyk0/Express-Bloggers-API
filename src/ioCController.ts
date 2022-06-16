@@ -1,19 +1,19 @@
-import { UsersService } from "./domain/usersService";
-import { UsersController } from "./presentation/UsersController";
-import { UsersRepository } from "./respositories/usersRepository";
-import { BloggersRepository } from "./respositories/bloggersRepository";
-import { BloggersService } from "./domain/bloggersService";
-import { BloggersController } from "./presentation/BloggersController";
-import { PostsRepository } from "./respositories/postsRepository";
-import { PostsService } from "./domain/postsService";
-import { PostsController } from "./presentation/PostsController";
-import { AuthService } from "./domain/authService";
-import { AuthController } from "./presentation/AuthController";
-import { EntityManager } from "./lib/entityManager";
-import { db } from "./respositories/db";
-import { CommentsRepository } from "./respositories/commentsRepository";
-import { CommentsService } from "./domain/commentsService";
-import { CommentsController } from "./presentation/CommentsController";
+import { UsersService } from './domain/usersService';
+import { UsersController } from './presentation/UsersController';
+import { UsersRepository } from './respositories/usersRepository';
+import { BloggersRepository } from './respositories/bloggersRepository';
+import { BloggersService } from './domain/bloggersService';
+import { BloggersController } from './presentation/BloggersController';
+import { PostsRepository } from './respositories/postsRepository';
+import { PostsService } from './domain/postsService';
+import { PostsController } from './presentation/PostsController';
+import { AuthService } from './domain/authService';
+import { AuthController } from './presentation/AuthController';
+import { EntityManager } from './lib/entityManager';
+import { db } from './respositories/db';
+import { CommentsRepository } from './respositories/commentsRepository';
+import { CommentsService } from './domain/commentsService';
+import { CommentsController } from './presentation/CommentsController';
 
 const m = new EntityManager(db);
 

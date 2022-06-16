@@ -1,13 +1,13 @@
-import request from "supertest";
-import { app } from "../..";
+import request from 'supertest';
+import { app } from '../..';
 
-import { mongoDBClient } from "../../respositories/db";
-import { IUser } from "../../entity/User";
+import { mongoDBClient } from '../../respositories/db';
+import { IUser } from '../../entity/User';
 
-describe("Test the bloggers", () => {
+describe('Test the bloggers', () => {
     let testUser: IUser;
 
-    const basicAuthToken = "Basic YWRtaW46cXdlcnR5";
+    const basicAuthToken = 'Basic YWRtaW46cXdlcnR5';
 
     beforeAll(async () => {
         await mongoDBClient.connect();
@@ -17,25 +17,25 @@ describe("Test the bloggers", () => {
         await mongoDBClient.close();
     });
 
-    test("Users route response the GET method with status code 200", async () => {
-        const result = await request(app).get("/users/");
+    test('Users route response the GET method with status code 200', async () => {
+        const result = await request(app).get('/users/');
 
         expect(result.statusCode).toBe(200);
     });
 
-    test("Users route response the GET method for not found blogger and status code 404", async () => {
-        const result = await request(app).get("/users/1");
+    test('Users route response the GET method for not found blogger and status code 404', async () => {
+        const result = await request(app).get('/users/1');
 
         expect(result.statusCode).toBe(404);
     });
 
-    test("Create user failed without Basic authorization", async () => {
+    test('Create user failed without Basic authorization', async () => {
         const randomString = Math.random().toString(32);
 
         const result = await request(app)
-            .post("/users/")
+            .post('/users/')
             .send({
-                login: "user-" + randomString,
+                login: 'user-' + randomString,
                 password: randomString,
             });
 
@@ -43,13 +43,13 @@ describe("Test the bloggers", () => {
         expect(result.statusCode).toBe(401);
     });
 
-    test("User is created with payload data with authorization", async () => {
+    test('User is created with payload data with authorization', async () => {
         const randomString = Math.random().toString(32);
 
         const result = await request(app)
-            .post("/users/")
+            .post('/users/')
             .send({
-                login: "user-" + randomString,
+                login: 'user-' + randomString,
                 password: randomString,
             })
             .set({ Authorization: basicAuthToken });
@@ -62,14 +62,14 @@ describe("Test the bloggers", () => {
         expect(result.statusCode).toBe(201);
     });
 
-    test("Delete user failed without authorization", async () => {
+    test('Delete user failed without authorization', async () => {
         const result = await request(app).delete(`/users/${testUser.id}`);
 
         expect((result as any).request.header.Authorization).toBeUndefined();
         expect(result.statusCode).toBe(401);
     });
 
-    test("Delete user send status code 200", async () => {
+    test('Delete user send status code 200', async () => {
         const result = await request(app)
             .delete(`/users/${testUser.id}`)
             .set({ Authorization: basicAuthToken });

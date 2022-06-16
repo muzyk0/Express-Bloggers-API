@@ -2,7 +2,7 @@ import {
     validate,
     ValidationError as ValidationErrorClass,
     ValidatorOptions,
-} from "class-validator";
+} from 'class-validator';
 
 export interface ErrorMessage {
     message: string;

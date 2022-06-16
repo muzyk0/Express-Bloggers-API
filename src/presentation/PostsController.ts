@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import { BloggersService } from "../domain/bloggersService";
-import { PostsService } from "../domain/postsService";
-import { IBlogger } from "../entity/Blogger/Blogger";
-import { Post } from "../entity/Post";
-import { Comment } from "../entity/Comments/Comments";
-import { Paginator } from "../lib/Paginator";
-import { CommentsService } from "../domain/commentsService";
+import { Request, Response } from 'express';
+import { BloggersService } from '../domain/bloggersService';
+import { PostsService } from '../domain/postsService';
+import { IBlogger } from '../entity/Blogger/Blogger';
+import { Post } from '../entity/Post';
+import { Comment } from '../entity/Comments/Comments';
+import { Paginator } from '../lib/Paginator';
+import { CommentsService } from '../domain/commentsService';
 
 export class PostsController {
     constructor(
@@ -59,7 +59,7 @@ export class PostsController {
             res.status(404).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Post doesn't exist`,
                     },
                 ])
@@ -79,7 +79,7 @@ export class PostsController {
                 title: string;
                 shortDescription: string;
                 content: string;
-                bloggerId: IBlogger["id"];
+                bloggerId: IBlogger['id'];
             }
         >,
         res: Response
@@ -108,7 +108,7 @@ export class PostsController {
             res.status(400).send(
                 Post.setErrors([
                     {
-                        field: "bloggerId",
+                        field: 'bloggerId',
                         message: `Blogger doesn't exist`,
                     },
                 ])
@@ -127,7 +127,7 @@ export class PostsController {
             res.status(400).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Post doesn't created`,
                     },
                 ])
@@ -147,7 +147,7 @@ export class PostsController {
                 title: string;
                 shortDescription: string;
                 content: string;
-                bloggerId: IBlogger["id"];
+                bloggerId: IBlogger['id'];
             }
         >,
         res: Response
@@ -178,7 +178,7 @@ export class PostsController {
             res.status(400).send(
                 Post.setErrors([
                     {
-                        field: "bloggerId",
+                        field: 'bloggerId',
                         message: `Blogger doesn't exist`,
                     },
                 ])
@@ -198,7 +198,7 @@ export class PostsController {
             res.status(404).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Post doesn't updated`,
                     },
                 ])
@@ -232,7 +232,7 @@ export class PostsController {
             res.status(404).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Post doesn't deleted`,
                     },
                 ])
@@ -272,7 +272,7 @@ export class PostsController {
 
         if (!post) {
             const errors = Post.setErrors([
-                { field: "", message: "Post doesn't exist" },
+                { field: '', message: "Post doesn't exist" },
             ]);
             res.status(404).send(errors);
             return;
@@ -285,7 +285,7 @@ export class PostsController {
 
         if (!comments) {
             const errors = Post.setErrors([
-                { field: "", message: "Comments doesn't exist" },
+                { field: '', message: "Comments doesn't exist" },
             ]);
             res.status(404).send(errors);
             return;
@@ -323,7 +323,7 @@ export class PostsController {
 
         if (!comment) {
             const errors = Post.setErrors([
-                { field: "", message: "Comment doesn't created" },
+                { field: '', message: "Comment doesn't created" },
             ]);
             res.status(404).send(errors);
             return;

@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { commentsService } from "../ioCController";
+import { NextFunction, Request, Response } from 'express';
+import { commentsService } from '../ioCController';
 
 export const isOwnership = async (
     req: Request,

@@ -1,12 +1,12 @@
-import { Db, Filter, WithId } from "mongodb";
-import { PaginatorOptions, ResponseDataWithPaginator } from "./Paginator";
+import { Db, Filter, WithId } from 'mongodb';
+import { PaginatorOptions, ResponseDataWithPaginator } from './Paginator';
 
 export type TFilter<T = any> = {
     withArchived?: boolean;
     softRemove?: boolean;
 } & Filter<T>;
 
-type TCollection = "bloggers" | "posts" | "users" | "comments";
+type TCollection = 'bloggers' | 'posts' | 'users' | 'comments';
 
 export class EntityManager {
     constructor(protected bd: Db) {}

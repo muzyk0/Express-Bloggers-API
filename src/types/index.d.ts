@@ -1,4 +1,4 @@
-import { UserAccessTokenPayload } from "../domain/authService";
+import { UserAccessTokenPayload } from '../domain/authService';
 
 declare global {
     declare namespace Express {

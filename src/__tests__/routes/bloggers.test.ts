@@ -1,12 +1,12 @@
-import request from "supertest";
-import { app } from "../..";
-import { IBlogger } from "../../entity/Blogger/Blogger";
-import { mongoDBClient } from "../../respositories/db";
+import request from 'supertest';
+import { app } from '../..';
+import { IBlogger } from '../../entity/Blogger/Blogger';
+import { mongoDBClient } from '../../respositories/db';
 
-describe("Test the bloggers", () => {
+describe('Test the bloggers', () => {
     let testBlogger: IBlogger;
 
-    const basicAuthToken = "Basic YWRtaW46cXdlcnR5";
+    const basicAuthToken = 'Basic YWRtaW46cXdlcnR5';
 
     beforeAll(async () => {
         await mongoDBClient.connect();
@@ -16,22 +16,22 @@ describe("Test the bloggers", () => {
         await mongoDBClient.close();
     });
 
-    test("Bloggers route should response the GET method with status code 200", async () => {
-        const result = await request(app).get("/bloggers/");
+    test('Bloggers route should response the GET method with status code 200', async () => {
+        const result = await request(app).get('/bloggers/');
 
         expect(result.statusCode).toBe(200);
     });
 
-    test("Bloggers route should response the GET method for not found blogger and status code 404", async () => {
-        const result = await request(app).get("/bloggers/1");
+    test('Bloggers route should response the GET method for not found blogger and status code 404', async () => {
+        const result = await request(app).get('/bloggers/1');
 
         expect(result.statusCode).toBe(404);
     });
 
     test("Blogger doesn't created without Basic authorization", async () => {
-        const result = await request(app).post("/bloggers/").send({
-            name: "Vlad",
-            youtubeUrl: "https://youtubefake.com",
+        const result = await request(app).post('/bloggers/').send({
+            name: 'Vlad',
+            youtubeUrl: 'https://youtubefake.com',
         });
 
         testBlogger = result.body;
@@ -40,13 +40,13 @@ describe("Test the bloggers", () => {
         expect((result as any).request.header.Authorization).toBeUndefined();
     });
 
-    test("Blogger are created with payload data and authorization", async () => {
+    test('Blogger are created with payload data and authorization', async () => {
         const result = await request(app)
-            .post("/bloggers/")
+            .post('/bloggers/')
             .set({ Authorization: basicAuthToken })
             .send({
-                name: "Vlad",
-                youtubeUrl: "https://youtubefake.com",
+                name: 'Vlad',
+                youtubeUrl: 'https://youtubefake.com',
             });
 
         testBlogger = result.body;
@@ -59,18 +59,18 @@ describe("Test the bloggers", () => {
         expect(result.body.id).toBeDefined();
     });
 
-    test("Created blogger if defined in sever BD", async () => {
+    test('Created blogger if defined in sever BD', async () => {
         const result = await request(app).get(`/bloggers/${testBlogger.id}`);
 
         expect(result.statusCode).toBe(200);
         expect(result.body).toEqual(testBlogger);
     });
 
-    test("Update Blogger failed without authorization", async () => {
+    test('Update Blogger failed without authorization', async () => {
         testBlogger = {
             id: testBlogger.id,
-            name: "Dimych",
-            youtubeUrl: "https://youtube.com",
+            name: 'Dimych',
+            youtubeUrl: 'https://youtube.com',
         };
 
         const result = await request(app)
@@ -81,11 +81,11 @@ describe("Test the bloggers", () => {
         expect(result.statusCode).toBe(401);
     });
 
-    test("Update Blogger with payload data and status code 204 and authorization", async () => {
+    test('Update Blogger with payload data and status code 204 and authorization', async () => {
         testBlogger = {
             id: testBlogger.id,
-            name: "Dimych",
-            youtubeUrl: "https://youtube.com",
+            name: 'Dimych',
+            youtubeUrl: 'https://youtube.com',
         };
 
         const result = await request(app)
@@ -99,21 +99,21 @@ describe("Test the bloggers", () => {
         expect(result.statusCode).toBe(204);
     });
 
-    test("Updated blogger to be defined", async () => {
+    test('Updated blogger to be defined', async () => {
         const result = await request(app).get(`/bloggers/${testBlogger.id}`);
 
         expect(result.statusCode).toBe(200);
         expect(result.body).toEqual(testBlogger);
     });
 
-    test("Delete blogger failed without authorization", async () => {
+    test('Delete blogger failed without authorization', async () => {
         const result = await request(app).delete(`/bloggers/${testBlogger.id}`);
 
         expect((result as any).request.header.Authorization).toBeUndefined();
         expect(result.statusCode).toBe(401);
     });
 
-    test("Delete blogger send status code 200", async () => {
+    test('Delete blogger send status code 200', async () => {
         const result = await request(app)
             .delete(`/bloggers/${testBlogger.id}`)
             .set({ Authorization: basicAuthToken });
@@ -124,7 +124,7 @@ describe("Test the bloggers", () => {
         expect(result.statusCode).toBe(204);
     });
 
-    test("Deleted blogger is not defined", async () => {
+    test('Deleted blogger is not defined', async () => {
         const result = await request(app).get(`/bloggers/${testBlogger.id}`);
 
         expect(result.statusCode).toBe(404);

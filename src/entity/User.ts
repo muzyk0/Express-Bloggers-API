@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, Length } from "class-validator";
-import { ValidationErrors } from "../lib/ValidationErrors";
-import { Nullable } from "../types/genericTypes";
+import { IsNotEmpty, IsString, Length } from 'class-validator';
+import { ValidationErrors } from '../lib/ValidationErrors';
+import { Nullable } from '../types/genericTypes';
 
 export interface IUser {
     id: string;
@@ -8,8 +8,8 @@ export interface IUser {
     password: string;
 }
 
-export type UserInput = Pick<IUser, "login" | "password">;
-export type UserDTO = Pick<IUser, "id" | "login">;
+export type UserInput = Pick<IUser, 'login' | 'password'>;
+export type UserDTO = Pick<IUser, 'id' | 'login'>;
 
 export class User extends ValidationErrors {
     @IsString()

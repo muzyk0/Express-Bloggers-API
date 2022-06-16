@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { Paginator } from "../lib/Paginator";
-import { BloggersService } from "../domain/bloggersService";
-import { Blogger } from "../entity/Blogger/Blogger";
-import { Post } from "../entity/Post";
-import { PostsService } from "../domain/postsService";
+import { Request, Response } from 'express';
+import { Paginator } from '../lib/Paginator';
+import { BloggersService } from '../domain/bloggersService';
+import { Blogger } from '../entity/Blogger/Blogger';
+import { Post } from '../entity/Post';
+import { PostsService } from '../domain/postsService';
 
 export class BloggersController {
     constructor(
@@ -54,7 +54,7 @@ export class BloggersController {
             res.status(404).send(
                 Blogger.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Blogger doesn't exist`,
                     },
                 ])
@@ -92,7 +92,7 @@ export class BloggersController {
             res.status(404).send(
                 Blogger.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Blogger doesn't exist`,
                     },
                 ])
@@ -173,7 +173,7 @@ export class BloggersController {
             res.status(404).send(
                 Post.setErrors([
                     {
-                        field: "bloggerId",
+                        field: 'bloggerId',
                         message: `Blogger doesn't exist`,
                     },
                 ])
@@ -192,7 +192,7 @@ export class BloggersController {
             res.status(400).send(
                 Post.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Post doesn't created`,
                     },
                 ])
@@ -235,7 +235,7 @@ export class BloggersController {
             res.status(404).send(
                 Blogger.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Blogger doesn't exist`,
                     },
                 ])
@@ -271,7 +271,7 @@ export class BloggersController {
             res.status(404).send(
                 Blogger.setErrors([
                     {
-                        field: "",
+                        field: '',
                         message: `Blogger doesn't exist`,
                     },
                 ])

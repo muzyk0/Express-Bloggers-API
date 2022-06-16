@@ -1,13 +1,13 @@
-import cors from "cors";
-import "dotenv/config";
-import express from "express";
-import { BASE_URL } from "./constants";
-import { CheckBodyIsEmpty } from "./middlewares/CheckBodyEmpty";
-import { authRoute } from "./routes/auth-route";
-import { bloggersRouter } from "./routes/bloggers-route";
-import { postsRoute } from "./routes/posts-route";
-import { usersRoute } from "./routes/users-route";
-import { commentsRoute } from "./routes/comments-route";
+import cors from 'cors';
+import 'dotenv/config';
+import express from 'express';
+import { BASE_URL } from './constants';
+import { CheckBodyIsEmpty } from './middlewares/CheckBodyEmpty';
+import { authRoute } from './routes/auth-route';
+import { bloggersRouter } from './routes/bloggers-route';
+import { postsRoute } from './routes/posts-route';
+import { usersRoute } from './routes/users-route';
+import { commentsRoute } from './routes/comments-route';
 
 export const app = express();
 app.use(cors());

@@ -1,9 +1,9 @@
-import bcrypt from "bcrypt";
-import { ObjectId, WithId } from "mongodb";
-import { v4 } from "uuid";
-import { IUser, UserInput } from "../entity/User";
-import { PaginatorOptions } from "../lib/Paginator";
-import { UsersRepository } from "../respositories/usersRepository";
+import bcrypt from 'bcrypt';
+import { ObjectId, WithId } from 'mongodb';
+import { v4 } from 'uuid';
+import { IUser, UserInput } from '../entity/User';
+import { PaginatorOptions } from '../lib/Paginator';
+import { UsersRepository } from '../respositories/usersRepository';
 
 export class UsersService {
     constructor(private usersRepository: UsersRepository) {}
@@ -43,7 +43,7 @@ export class UsersService {
         return this.usersRepository.createUser(user);
     }
 
-    async deleteUser(id: IUser["id"]): Promise<boolean> {
+    async deleteUser(id: IUser['id']): Promise<boolean> {
         return this.usersRepository.deleteUser(id, { softRemove: false });
     }
 }

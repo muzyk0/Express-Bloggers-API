@@ -1,19 +1,19 @@
-import { IsNotEmpty, IsString, Length } from "class-validator";
-import { ValidationErrors } from "../lib/ValidationErrors";
-import { Nullable } from "../types/genericTypes";
-import { IBlogger } from "./Blogger/Blogger";
+import { IsNotEmpty, IsString, Length } from 'class-validator';
+import { ValidationErrors } from '../lib/ValidationErrors';
+import { Nullable } from '../types/genericTypes';
+import { IBlogger } from './Blogger/Blogger';
 
 export interface IPost {
     id: string;
     title: string;
     shortDescription: string;
     content: string;
-    bloggerId: IBlogger["id"];
-    bloggerName: IBlogger["name"];
+    bloggerId: IBlogger['id'];
+    bloggerName: IBlogger['name'];
 }
 
-export type PostInput = Partial<Pick<IPost, "id">> &
-    Pick<IPost, "title" | "content" | "shortDescription" | "bloggerId">;
+export type PostInput = Partial<Pick<IPost, 'id'>> &
+    Pick<IPost, 'title' | 'content' | 'shortDescription' | 'bloggerId'>;
 
 export class Post extends ValidationErrors {
     @IsString()
@@ -30,8 +30,8 @@ export class Post extends ValidationErrors {
     content: Nullable<string> = null;
 
     @IsString()
-    bloggerId: Nullable<IBlogger["id"]> = null;
+    bloggerId: Nullable<IBlogger['id']> = null;
 
     @Length(1)
-    bloggerName: Nullable<IBlogger["name"]> = null;
+    bloggerName: Nullable<IBlogger['name']> = null;
 }

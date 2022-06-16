@@ -1,10 +1,10 @@
-import { v4 } from "uuid";
+import { v4 } from 'uuid';
 
-import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
-import { CommentsRepository } from "../respositories/commentsRepository";
-import { PostsService } from "./postsService";
-import { UsersService } from "./usersService";
-import {CommentDTO, IComment} from "../entity/Comments/Comments";
+import { PaginatorOptions, ResponseDataWithPaginator } from '../lib/Paginator';
+import { CommentsRepository } from '../respositories/commentsRepository';
+import { PostsService } from './postsService';
+import { UsersService } from './usersService';
+import { CommentDTO, IComment } from '../entity/Comments/Comments';
 
 export class CommentsService implements IPostsService {
     constructor(
@@ -52,7 +52,7 @@ export class CommentsService implements IPostsService {
             addedAt: new Date(),
         };
 
-        return await this.commentRepository.createPostComment(newComment);
+        return this.commentRepository.createPostComment(newComment);
     }
     async updateComment(comment: UpdatePostQuery) {
         const updatedComment = await this.commentRepository.updatePostComment(

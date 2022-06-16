@@ -1,12 +1,11 @@
-import { OptionalId } from "mongodb";
+import { OptionalId } from 'mongodb';
 
-import { CommentsModel } from "../entity/Comments/CommentsModel";
-import { EntityManager } from "../lib/entityManager";
-import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
-import { db } from "./db";
-import {CommentDTO, IComment} from "../entity/Comments/Comments";
+import { EntityManager } from '../lib/entityManager';
+import { PaginatorOptions, ResponseDataWithPaginator } from '../lib/Paginator';
+import { db } from './db';
+import { CommentDTO, IComment } from '../entity/Comments/Comments';
 
-const commentsCollection = db.collection<IComment>("comments");
+const commentsCollection = db.collection<IComment>('comments');
 
 export class CommentsRepository implements ICommentsRepository {
     constructor(private m: EntityManager) {}
@@ -21,7 +20,10 @@ export class CommentsRepository implements ICommentsRepository {
         //     { postId: 0 }
         // );
 
-        const result = await commentsCollection.findOne({id: commentId}, {projection: {_id: false, postId: false}})
+        const result = await commentsCollection.findOne(
+            { id: commentId },
+            { projection: { _id: false, postId: false } }
+        );
 
         return result;
     }
@@ -37,7 +39,7 @@ export class CommentsRepository implements ICommentsRepository {
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<CommentDTO>> {
         return this.m.find(
-            "comments",
+            'comments',
             {
                 ...(postId ? { postId: postId } : {}),
                 withArchived,
@@ -89,7 +91,9 @@ export class CommentsRepository implements ICommentsRepository {
     }
 
     async removePostComment(commentId: string): Promise<boolean> {
-        const result = await CommentsModel.deleteOne({ id: commentId });
+        // const result = await CommentsModel.deleteOne({ id: commentId });
+
+        const result = await commentsCollection.deleteOne({ id: commentId });
 
         return result.deletedCount > 0;
     }

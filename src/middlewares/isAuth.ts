@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { ioc } from "../ioCController";
+import { NextFunction, Request, Response } from 'express';
+import { ioc } from '../ioCController';
 
 export const isAuth = async (
     req: Request,
@@ -11,12 +11,12 @@ export const isAuth = async (
         return;
     }
 
-    if (req.headers.authorization.split(" ")[0] !== "Bearer") {
+    if (req.headers.authorization.split(' ')[0] !== 'Bearer') {
         res.sendStatus(401);
         return;
     }
 
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization.split(' ')[1];
 
     const user = await ioc.authService.checkCredentialWithBearerToken(token);
 

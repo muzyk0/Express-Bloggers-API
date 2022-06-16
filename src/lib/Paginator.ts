@@ -1,5 +1,5 @@
-import { IsInt, IsString, Max, Min } from "class-validator";
-import { ValidationErrors } from "./ValidationErrors";
+import { IsInt, IsString, Max, Min } from 'class-validator';
+import { ValidationErrors } from './ValidationErrors';
 
 export interface ResponseDataWithPaginator<T = any[]> {
     pagesCount: number;
@@ -11,12 +11,12 @@ export interface ResponseDataWithPaginator<T = any[]> {
 
 export type PaginatorOptions = Pick<
     ResponseDataWithPaginator,
-    "page" | "pageSize"
+    'page' | 'pageSize'
 >;
 
 export class Paginator extends ValidationErrors {
     @IsString()
-    SearchNameTerm: string = "";
+    SearchNameTerm: string = '';
 
     @IsInt()
     @Min(1)
@@ -36,7 +36,7 @@ export class Paginator extends ValidationErrors {
     }) {
         super();
 
-        if (typeof PageNumber === "string") {
+        if (typeof PageNumber === 'string') {
             this.PageNumber = +PageNumber;
         }
 
@@ -44,7 +44,7 @@ export class Paginator extends ValidationErrors {
             this.PageNumber = +PageNumber[0];
         }
 
-        if (typeof PageSize === "string") {
+        if (typeof PageSize === 'string') {
             this.PageSize = +PageSize;
         }
 
@@ -52,7 +52,7 @@ export class Paginator extends ValidationErrors {
             this.PageSize = +PageSize[0];
         }
 
-        if (SearchNameTerm && typeof SearchNameTerm === "string") {
+        if (SearchNameTerm && typeof SearchNameTerm === 'string') {
             this.SearchNameTerm = SearchNameTerm;
         }
 

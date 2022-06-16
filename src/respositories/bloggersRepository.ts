@@ -1,8 +1,8 @@
-import { db } from "./db";
-import { IBlogger } from "../entity/Blogger/Blogger";
-import { EntityManager } from "../lib/entityManager";
-import { PaginatorOptions, ResponseDataWithPaginator } from "../lib/Paginator";
-import { Nullable } from "../types/genericTypes";
+import { db } from './db';
+import { IBlogger } from '../entity/Blogger/Blogger';
+import { EntityManager } from '../lib/entityManager';
+import { PaginatorOptions, ResponseDataWithPaginator } from '../lib/Paginator';
+import { Nullable } from '../types/genericTypes';
 
 // export interface Blogger {
 //     id: number;
@@ -10,7 +10,7 @@ import { Nullable } from "../types/genericTypes";
 //     youtubeUrl: string;
 // }
 
-const bloggersCollection = db.collection<IBlogger>("bloggers");
+const bloggersCollection = db.collection<IBlogger>('bloggers');
 
 export class BloggersRepository {
     constructor(private m: EntityManager) {}
@@ -24,7 +24,7 @@ export class BloggersRepository {
         paginatorOptions?: PaginatorOptions
     ): Promise<ResponseDataWithPaginator<IBlogger>> {
         return this.m.find<IBlogger>(
-            "bloggers",
+            'bloggers',
             searchNameTerm ? { name: { $regex: searchNameTerm } } : {},
             paginatorOptions
         );
@@ -39,10 +39,10 @@ export class BloggersRepository {
     //     });
     // },
     async getBloggerById(
-        id: IBlogger["id"],
+        id: IBlogger['id'],
         withArchived: boolean = false
     ): Promise<IBlogger | null> {
-        return this.m.findOne<IBlogger>("bloggers", { withArchived, id });
+        return this.m.findOne<IBlogger>('bloggers', { withArchived, id });
     }
     async createBlogger(blogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(blogger, {
@@ -51,8 +51,8 @@ export class BloggersRepository {
         return blogger;
     }
     async updateBlogger(
-        id: IBlogger["id"],
-        blogger: Pick<IBlogger, "name" | "youtubeUrl">
+        id: IBlogger['id'],
+        blogger: Pick<IBlogger, 'name' | 'youtubeUrl'>
     ): Promise<IBlogger | null> {
         const result = await bloggersCollection.findOneAndUpdate(
             { id: id, deleted: { $exists: false } },
@@ -61,15 +61,15 @@ export class BloggersRepository {
                     ...blogger,
                 },
             },
-            { returnDocument: "after" }
+            { returnDocument: 'after' }
         );
         return result.value;
     }
     async deleteBloggerById(
-        id: IBlogger["id"],
+        id: IBlogger['id'],
         options?: { softRemove: boolean }
     ): Promise<boolean> {
-        const result = await this.m.deleteOne("bloggers", {
+        const result = await this.m.deleteOne('bloggers', {
             id,
             softRemove: options?.softRemove,
         });

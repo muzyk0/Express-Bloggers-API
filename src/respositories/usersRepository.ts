@@ -1,10 +1,10 @@
-import { WithId } from "mongodb";
-import { IUser } from "../entity/User";
-import { EntityManager } from "../lib/entityManager";
-import { PaginatorOptions } from "../lib/Paginator";
-import { db } from "./db";
+import { WithId } from 'mongodb';
+import { IUser } from '../entity/User';
+import { EntityManager } from '../lib/entityManager';
+import { PaginatorOptions } from '../lib/Paginator';
+import { db } from './db';
 
-const usersCollection = db.collection("users");
+const usersCollection = db.collection('users');
 
 export class UsersRepository {
     constructor(private m: EntityManager) {}
@@ -19,7 +19,7 @@ export class UsersRepository {
         paginatorOptions?: PaginatorOptions
     ) {
         const users = await this.m.find(
-            "users",
+            'users',
             {
                 ...(searchNameTerm
                     ? { title: { $regex: searchNameTerm } }
@@ -33,11 +33,11 @@ export class UsersRepository {
     }
 
     async getUserByLogin(login: string) {
-        return this.m.findOne<IUser>("users", { login: login });
+        return this.m.findOne<IUser>('users', { login: login });
     }
 
     async getUserById(id: string) {
-        return this.m.findOne<IUser>("users", { id });
+        return this.m.findOne<IUser>('users', { id });
     }
 
     async createUser(user: WithId<IUser>) {
@@ -51,8 +51,8 @@ export class UsersRepository {
         );
     }
 
-    async deleteUser(id: IUser["id"], options?: { softRemove: boolean }) {
-        return this.m.deleteOne("users", {
+    async deleteUser(id: IUser['id'], options?: { softRemove: boolean }) {
+        return this.m.deleteOne('users', {
             id,
             softRemove: options?.softRemove,
         });

@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET } from "../constants";
-import { UsersService } from "./usersService";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { ACCESS_TOKEN_SECRET } from '../constants';
+import { UsersService } from './usersService';
 
 export interface UserAccessTokenPayload {
     userId: string;
@@ -17,7 +17,7 @@ export class AuthService {
     constructor(private usersService: UsersService) {}
     createJWT(payload: UserAccessTokenPayload) {
         const token = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
-            expiresIn: "1h",
+            expiresIn: '1h',
         });
         return token;
     }
@@ -39,11 +39,11 @@ export class AuthService {
         }
     }
     decodeBaseAuth(token: string): AuthData {
-        const buff = Buffer.from(token, "base64");
+        const buff = Buffer.from(token, 'base64');
 
-        const decodedString = buff.toString("ascii");
+        const decodedString = buff.toString('ascii');
 
-        const loginAndPassword = decodedString.split(":");
+        const loginAndPassword = decodedString.split(':');
 
         return {
             login: loginAndPassword[0],

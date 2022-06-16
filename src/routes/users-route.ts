@@ -1,18 +1,18 @@
-import express from "express";
-import { ioc } from "../ioCController";
-import { isBaseAuth } from "../middlewares/isBaseAuth";
+import express from 'express';
+import { ioc } from '../ioCController';
+import { isBaseAuth } from '../middlewares/isBaseAuth';
 
 export const usersRoute = express.Router();
 
 usersRoute
-    .get("/", ioc.usersController.getAllUsers.bind(ioc.usersController))
+    .get('/', ioc.usersController.getAllUsers.bind(ioc.usersController))
     .post(
-        "/",
+        '/',
         isBaseAuth,
         ioc.usersController.createNewUser.bind(ioc.usersController)
     )
     .delete(
-        "/:id",
+        '/:id',
         isBaseAuth,
         ioc.usersController.deleteUser.bind(ioc.usersController)
     );

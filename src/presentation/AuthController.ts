@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { User } from "../entity/User";
-import { AuthService } from "../domain/authService";
+import { Request, Response } from 'express';
+import { User } from '../entity/User';
+import { AuthService } from '../domain/authService';
 
 export class AuthController {
     constructor(private authService: AuthService) {}
@@ -30,8 +30,8 @@ export class AuthController {
         if (!token) {
             const generatedError = User.setErrors([
                 {
-                    field: "loginOrPassword",
-                    message: "login or passoword is incorrect",
+                    field: 'loginOrPassword',
+                    message: 'login or passoword is incorrect',
                 },
             ]);
 

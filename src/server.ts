@@ -1,10 +1,10 @@
-import { app } from ".";
-import { PORT } from "./constants";
-import { runDB } from "./respositories/db";
+import { app } from '.';
+import { PORT } from './constants';
+import { runDB } from './respositories/db';
 
 try {
     (async () => {
-        debugger
+        debugger;
         await runDB();
 
         app.listen(PORT, async () => {

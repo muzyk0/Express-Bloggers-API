@@ -11,11 +11,11 @@ export class CommentsController {
         const commentId = req.params.id;
 
         {
-            const postValidation = new Comment();
+            const commentValidation = new Comment();
 
-            postValidation.id = commentId;
+            commentValidation.id = commentId;
 
-            const errors = await Post.validate(postValidation);
+            const errors = await Comment.validate(commentValidation);
 
             if (errors) {
                 res.status(400).send(errors);
@@ -60,7 +60,7 @@ export class CommentsController {
             commentValidation.id = id;
             commentValidation.content = content?.trim();
 
-            const errors = await Post.validate(commentValidation);
+            const errors = await Comment.validate(commentValidation);
 
             if (errors) {
                 res.status(400).send(errors);
@@ -107,7 +107,7 @@ export class CommentsController {
 
             commentValidation.id = commentId;
 
-            const errors = await Post.validate(commentValidation);
+            const errors = await Comment.validate(commentValidation);
 
             if (errors) {
                 res.status(400).send(errors);

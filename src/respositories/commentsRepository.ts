@@ -21,7 +21,7 @@ export class CommentsRepository implements ICommentsRepository {
         //     { postId: 0 }
         // );
 
-        const result = await commentsCollection.findOne({id: commentId}, {projection: {postId: false}})
+        const result = await commentsCollection.findOne({id: commentId}, {projection: {_id: false, postId: false}})
 
         return result;
     }

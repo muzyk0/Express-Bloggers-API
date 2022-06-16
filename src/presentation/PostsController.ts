@@ -302,12 +302,12 @@ export class PostsController {
         const { id } = req.params;
         const { content } = req.body;
 
-        const postValidation = new Comment();
+        const commentValidation = new Comment();
 
-        postValidation.id = id;
-        postValidation.content = content;
+        commentValidation.id = id;
+        commentValidation.content = content;
 
-        const errors = await Post.validate(postValidation);
+        const errors = await Comment.validate(commentValidation);
 
         if (errors) {
             res.status(400).send(errors);

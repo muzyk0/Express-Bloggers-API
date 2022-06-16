@@ -49,7 +49,7 @@ export class PostsRepository {
             {
                 $set: post,
             },
-            { returnDocument: "after" }
+            { returnDocument: "after", projection: {_id: false}}
         );
 
         return modifyPost.value;

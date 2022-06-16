@@ -11,7 +11,6 @@ export interface ErrorMessage {
 
 interface IResponse {
     errorsMessages: ErrorMessage[];
-    resultCode: number;
 }
 
 /**
@@ -22,7 +21,6 @@ interface IResponse {
 export const setErrors = (errors: ErrorMessage[]): IResponse => {
     return {
         errorsMessages: errors,
-        resultCode: 1,
     };
 };
 
@@ -36,7 +34,6 @@ export class ValidationErrors {
         ValidationErrors.setErrors = (errors: ErrorMessage[]): IResponse => {
             return {
                 errorsMessages: errors,
-                resultCode: 1,
             };
         };
     }

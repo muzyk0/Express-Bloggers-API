@@ -4,6 +4,7 @@ import { EntityManager } from '../lib/entityManager';
 import { PaginatorOptions, ResponseDataWithPaginator } from '../lib/Paginator';
 import { db } from './db';
 import { CommentDTO, IComment } from '../entity/Comments/Comments';
+import { CommentsModel } from '../entity/Comments/CommentsModel';
 
 const commentsCollection = db.collection<IComment>('comments');
 
@@ -15,15 +16,15 @@ export class CommentsRepository implements ICommentsRepository {
         commentId?: string;
         withArchived?: boolean;
     }): Promise<CommentDTO | null> {
-        // const result = await CommentsModel.findOne(
-        //     { id: 'c1303e6f-92c4-4287-afdd-c2389ef4bb79' },
-        //     { postId: 0 }
-        // );
-
-        const result = await commentsCollection.findOne(
+        const result = await CommentsModel.findOne(
             { id: commentId },
-            { projection: { _id: false, postId: false } }
+            { _id: false, postId: 0 }
         );
+
+        // const result = await commentsCollection.findOne(
+        //     { id: commentId },
+        //     { projection: { _id: false, postId: false } }
+        // );
 
         return result;
     }

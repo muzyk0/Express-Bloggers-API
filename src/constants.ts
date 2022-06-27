@@ -4,7 +4,7 @@ export const PORT = process.env.PORT ?? 5000;
  * This is base URL for API.
  * @use "/api"
  */
-export const BASE_PREFIX = process.env.BASE_URL ?? '';
+export const BASE_PREFIX = process.env.BASE_PREFIX ?? '';
 export const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3000';
 
 export const MONGO_URI: string =

@@ -16,6 +16,7 @@ app.use(CheckBodyIsEmpty);
 
 try {
     (async () => {
+        console.log(BASE_PREFIX);
         app.use(`${BASE_PREFIX}/bloggers`, bloggersRouter);
         app.use(`${BASE_PREFIX}/posts`, postsRoute);
         app.use(`${BASE_PREFIX}/users`, usersRoute);

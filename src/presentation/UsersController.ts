@@ -31,15 +31,20 @@ export class UsersController {
 
     // .post("/")
     async createNewUser(
-        req: Request<{}, {}, { login: string; password: string }>,
+        req: Request<
+            {},
+            {},
+            { login: string; password: string; email: string }
+        >,
         res: Response
     ) {
         const userValidation = new User();
 
-        const { login, password } = req.body;
+        const { login, password, email } = req.body;
 
         userValidation.login = login;
         userValidation.password = password;
+        userValidation.email = email;
 
         const errors = await User.validate(userValidation);
 
@@ -48,7 +53,23 @@ export class UsersController {
             return;
         }
 
-        const user = await this.usersService.createUser({ login, password });
+        const user = await this.usersService.createUser({
+            login,
+            password,
+            email,
+        });
+
+        if (!user) {
+            res.status(400).send(
+                User.setErrors([
+                    {
+                        field: '',
+                        message: `User doesn't created`,
+                    },
+                ])
+            );
+            return;
+        }
 
         res.status(201).send(user);
     }

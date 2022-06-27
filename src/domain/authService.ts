@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN_SECRET } from '../constants';
-import { UsersService } from './usersService';
+import { UsersRepository } from '../respositories/usersRepository';
 
 export interface UserAccessTokenPayload {
     userId: string;
@@ -14,7 +14,7 @@ export interface AuthData {
 }
 
 export class AuthService {
-    constructor(private usersService: UsersService) {}
+    constructor(private usersRepository: UsersRepository) {}
     createJWT(payload: UserAccessTokenPayload) {
         const token = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
             expiresIn: '1h',
@@ -28,7 +28,7 @@ export class AuthService {
             return null;
         }
 
-        return this.usersService.findUserById(userId);
+        return this.usersRepository.getUserById(userId);
     }
     getUserIdByToken(token: string): string | null {
         try {
@@ -51,19 +51,25 @@ export class AuthService {
         };
     }
     async login({ login, password }: AuthData): Promise<string | null> {
-        const user = await this.usersService.findUserByLogin(login);
+        const user = await this.usersRepository.getUserByLogin(login);
 
         if (!user) {
             return null;
         }
 
-        const isEqual = await this.comparePassword(password, user.password);
+        const {
+            password: userPassword,
+            id,
+            login: userLogin,
+        } = user.accountData;
+
+        const isEqual = await this.comparePassword(password, userPassword);
 
         if (!isEqual) {
             return null;
         }
 
-        const token = this.createJWT({ userId: user.id, login: user.login });
+        const token = this.createJWT({ userId: id, login: userLogin });
 
         return token;
     }
@@ -73,5 +79,8 @@ export class AuthService {
         } catch {
             return false;
         }
+    }
+    async generateHashPassword(password: string) {
+        return bcrypt.hash(password, 10);
     }
 }

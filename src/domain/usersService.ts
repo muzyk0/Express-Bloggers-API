@@ -1,12 +1,19 @@
-import bcrypt from 'bcrypt';
-import { ObjectId, WithId } from 'mongodb';
-import { v4 } from 'uuid';
-import { IUser, UserInput } from '../entity/User';
+import { IUser, UserDTO, UserInput } from '../entity/User';
 import { PaginatorOptions } from '../lib/Paginator';
 import { UsersRepository } from '../respositories/usersRepository';
+import { UserAccountDBType } from '../types/types';
+import { v4 } from 'uuid';
+import { addDays } from 'date-fns';
+import { emailTemplateManager } from './email-template-manager';
+import { EmailService } from './email-service';
+import { AuthService } from './authService';
 
 export class UsersService {
-    constructor(private usersRepository: UsersRepository) {}
+    constructor(
+        private usersRepository: UsersRepository,
+        private authService: AuthService,
+        private emailService: EmailService
+    ) {}
 
     async findUsers(
         {
@@ -30,17 +37,56 @@ export class UsersService {
         return this.usersRepository.getUserById(id);
     }
 
-    async createUser({ login, password }: UserInput) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user: WithId<IUser> = {
-            _id: new ObjectId(),
-            id: v4(),
-            login,
-            password: hashedPassword,
+    async createUser({
+        login,
+        email,
+        password,
+    }: UserInput): Promise<UserDTO | null> {
+        const passwordHash = await this.authService.generateHashPassword(
+            password
+        );
+        const newUser: UserAccountDBType = {
+            accountData: {
+                id: v4(),
+                login,
+                email,
+                password: passwordHash,
+                createdAt: new Date(),
+            },
+            loginAttempts: [],
+            emailConfirmation: {
+                sentEmails: [],
+                confirmationCode: v4(),
+                expirationDate: addDays(new Date(), 1),
+                isConfirmed: false,
+            },
         };
 
-        return this.usersRepository.createUser(user);
+        const createdUser = await this.usersRepository.createUser(newUser);
+
+        if (!createdUser) {
+            return null;
+        }
+
+        try {
+            const emailTemplate =
+                emailTemplateManager.getEmailConfirmationMessage(newUser);
+
+            await this.emailService.sendEmail(
+                email,
+                'Confirm your account ✔',
+                emailTemplate
+            );
+        } catch (e) {
+            console.error(e);
+        }
+
+        const { id, login: userLogin } = createdUser.accountData;
+
+        return {
+            id,
+            login: userLogin,
+        };
     }
 
     async deleteUser(id: IUser['id']): Promise<boolean> {

@@ -14,6 +14,7 @@ import { db } from './respositories/db';
 import { CommentsRepository } from './respositories/commentsRepository';
 import { CommentsService } from './domain/commentsService';
 import { CommentsController } from './presentation/CommentsController';
+import { EmailService } from './domain/email-service';
 
 const m = new EntityManager(db);
 
@@ -22,10 +23,15 @@ const postRepository = new PostsRepository(m);
 const bloggerRepository = new BloggersRepository(m);
 const commentsRepository = new CommentsRepository(m);
 
-const usersService = new UsersService(usersRepository);
+const emailService = new EmailService();
+const authService = new AuthService(usersRepository);
+const usersService = new UsersService(
+    usersRepository,
+    authService,
+    emailService
+);
 const bloggerService = new BloggersService(bloggerRepository);
 const postService = new PostsService(postRepository, bloggerService);
-const authService = new AuthService(usersService);
 export const commentsService = new CommentsService(
     postService,
     usersService,

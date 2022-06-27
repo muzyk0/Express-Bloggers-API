@@ -1,7 +1,7 @@
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
-import { BASE_URL } from './constants';
+import { BASE_PREFIX } from './constants';
 import { CheckBodyIsEmpty } from './middlewares/CheckBodyEmpty';
 import { authRoute } from './routes/auth-route';
 import { bloggersRouter } from './routes/bloggers-route';
@@ -16,11 +16,11 @@ app.use(CheckBodyIsEmpty);
 
 try {
     (async () => {
-        app.use(`${BASE_URL}/bloggers`, bloggersRouter);
-        app.use(`${BASE_URL}/posts`, postsRoute);
-        app.use(`${BASE_URL}/users`, usersRoute);
-        app.use(`${BASE_URL}/auth`, authRoute);
-        app.use(`${BASE_URL}/comments`, commentsRoute);
+        app.use(`${BASE_PREFIX}/bloggers`, bloggersRouter);
+        app.use(`${BASE_PREFIX}/posts`, postsRoute);
+        app.use(`${BASE_PREFIX}/users`, usersRoute);
+        app.use(`${BASE_PREFIX}/auth`, authRoute);
+        app.use(`${BASE_PREFIX}/comments`, commentsRoute);
     })();
 } catch (error) {
     console.error(error);

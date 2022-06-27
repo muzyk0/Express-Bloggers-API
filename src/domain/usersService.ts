@@ -33,6 +33,10 @@ export class UsersService {
         return this.usersRepository.getUserByLogin(login);
     }
 
+    async findUserByEmail(email: string) {
+        return this.usersRepository.getUserByEmail(email);
+    }
+
     async findUserById(id: string) {
         return this.usersRepository.getUserById(id);
     }

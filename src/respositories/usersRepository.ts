@@ -42,6 +42,10 @@ export class UsersRepository {
         return usersCollection.findOne({ 'accountData.login': login });
     }
 
+    async getUserByEmail(email: string) {
+        return usersCollection.findOne({ 'accountData.email': email });
+    }
+
     async getUserById(id: string) {
         return this.m.findOne<IUser>('users', { 'accountData.id': id });
     }

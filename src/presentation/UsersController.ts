@@ -53,6 +53,38 @@ export class UsersController {
             return;
         }
 
+        const userAlreadyExistByLogin = await this.usersService.findUserByLogin(
+            login
+        );
+
+        if (userAlreadyExistByLogin) {
+            res.status(400).send(
+                User.setErrors([
+                    {
+                        field: 'login',
+                        message: `User already exist`,
+                    },
+                ])
+            );
+            return;
+        }
+
+        const userAlreadyExistByEmail = await this.usersService.findUserByEmail(
+            email
+        );
+
+        if (userAlreadyExistByEmail) {
+            res.status(400).send(
+                User.setErrors([
+                    {
+                        field: 'email',
+                        message: `User already exist`,
+                    },
+                ])
+            );
+            return;
+        }
+
         const user = await this.usersService.createUser({
             login,
             password,

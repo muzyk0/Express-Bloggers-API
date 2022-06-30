@@ -7,5 +7,6 @@ authRoute
     .post('/login', ioc.authController.login.bind(ioc.authController))
     .post(
         '/registration',
+        ioc.limitsController.checkLimitsMiddleware.bind(ioc.limitsController),
         ioc.usersController.createNewUser.bind(ioc.usersController)
     );

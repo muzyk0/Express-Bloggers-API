@@ -14,10 +14,10 @@ export const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(CheckBodyIsEmpty);
+app.set('trust proxy', true);
 
 try {
     (async () => {
-        console.log(BASE_PREFIX);
         app.use(`${BASE_PREFIX}/bloggers`, bloggersRouter);
         app.use(`${BASE_PREFIX}/posts`, postsRoute);
         app.use(`${BASE_PREFIX}/users`, usersRoute);

@@ -18,6 +18,8 @@ import { EmailService } from './domain/email-service';
 import { TestingRepository } from './respositories/testingRepository';
 import { TestingService } from './domain/testingService';
 import { TestingController } from './presentation/TestingController';
+import { LimitsControl } from './middlewares/limitsControl';
+import { LimitsRepository } from './respositories/limitsRepository';
 
 const m = new EntityManager(db);
 
@@ -26,6 +28,7 @@ const postRepository = new PostsRepository(m);
 const bloggerRepository = new BloggersRepository(m);
 const commentsRepository = new CommentsRepository(m);
 const testingRepository = new TestingRepository();
+const limitsRepository = new LimitsRepository();
 
 const emailService = new EmailService();
 const authService = new AuthService(usersRepository);
@@ -54,6 +57,8 @@ const authController = new AuthController(authService);
 const commentsController = new CommentsController(commentsService);
 const testingController = new TestingController(testingService);
 
+const limitsController = new LimitsControl(limitsRepository);
+
 export const ioc = {
     usersController,
     postController,
@@ -62,4 +67,5 @@ export const ioc = {
     authController,
     commentsController,
     testingController,
+    limitsController,
 };

@@ -15,7 +15,7 @@ export const LimitSchema = new mongoose.Schema<ILimit>({
     id: { type: String, default: v4() },
     ip: { type: String, required: true },
     url: { type: String, required: true },
-    createdAt: { type: Date, default: new Date() },
+    createdAt: { type: Date, required: true },
 });
 
 export const LimitsModel = mongooseConnection.model<ILimit>(

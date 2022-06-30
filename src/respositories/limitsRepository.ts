@@ -11,6 +11,7 @@ export class LimitsRepository implements ILimitsRepository {
         await LimitsModel.create({
             url,
             ip,
+            createdAt: new Date(),
         });
 
         return true;

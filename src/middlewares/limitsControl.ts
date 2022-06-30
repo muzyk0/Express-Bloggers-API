@@ -1,14 +1,13 @@
 import { LimitInput } from '../entity/Limit/LimitModel';
 import { LimitsRepository } from '../respositories/limitsRepository';
 import { addMilliseconds } from 'date-fns';
-import { NextFunction, Request, Response } from 'express';
 
 export interface ILimitsControl {
-    checkLimitsMiddleware(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void>;
+    // checkLimitsMiddleware(
+    //     req: Request,
+    //     res: Response,
+    //     next: NextFunction
+    // ): Promise<void>;
     checkLimits(
         requestAttempt: LimitInput,
         limitMs: number,
@@ -18,28 +17,6 @@ export interface ILimitsControl {
 
 export class LimitsControl implements ILimitsControl {
     constructor(private limitsRepository: LimitsRepository) {}
-
-    async checkLimitsMiddleware(
-        { ip, url }: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-        const maxLimitInterval = 10 * 1000;
-        let maxRequest = 5;
-
-        const isContinue = await this.checkLimits(
-            { ip, url },
-            maxLimitInterval,
-            maxRequest
-        );
-
-        if (!isContinue) {
-            res.sendStatus(429);
-            return;
-        }
-
-        next();
-    }
 
     async checkLimits(
         { ip, url }: LimitInput,

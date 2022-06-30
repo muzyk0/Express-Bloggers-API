@@ -2,7 +2,7 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 import { MONGO_URI } from '../constants';
 import mongoose from 'mongoose';
 
-export const collections = ['bloggers', 'posts', 'comments', 'users'];
+export const collections = ['bloggers', 'posts', 'comments', 'users', 'limits'];
 
 const credentials: string | undefined = undefined;
 

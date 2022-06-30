@@ -4,11 +4,19 @@ import { addMilliseconds } from 'date-fns';
 import { NextFunction, Request, Response } from 'express';
 
 export interface ILimitsControl {
-    checkLimitsMiddleware(req: Request, res: Response): Promise<void>;
-    checkLimits(requestAttempt: LimitInput): Promise<boolean>;
+    checkLimitsMiddleware(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void>;
+    checkLimits(
+        requestAttempt: LimitInput,
+        limitMs: number,
+        maxRequest: number
+    ): Promise<boolean>;
 }
 
-export class LimitsControl {
+export class LimitsControl implements ILimitsControl {
     constructor(private limitsRepository: LimitsRepository) {}
 
     async checkLimitsMiddleware(

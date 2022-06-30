@@ -8,6 +8,7 @@ import { bloggersRouter } from './routes/bloggers-route';
 import { postsRoute } from './routes/posts-route';
 import { usersRoute } from './routes/users-route';
 import { commentsRoute } from './routes/comments-route';
+import { testingRoute } from './routes/testing-route';
 
 export const app = express();
 app.use(cors());
@@ -22,6 +23,7 @@ try {
         app.use(`${BASE_PREFIX}/users`, usersRoute);
         app.use(`${BASE_PREFIX}/auth`, authRoute);
         app.use(`${BASE_PREFIX}/comments`, commentsRoute);
+        app.use(`${BASE_PREFIX}/testing`, testingRoute);
     })();
 } catch (error) {
     console.error(error);

@@ -72,4 +72,34 @@ export class AuthController {
 
         res.sendStatus(204);
     }
+
+    async resendConfirmationCode(
+        req: Request<{}, {}, { email: string }>,
+        res: Response
+    ) {
+        const { email } = req.body;
+
+        const validate = new User();
+
+        validate.email = email;
+
+        const errors = await User.validate(validate);
+
+        if (errors) {
+            res.status(400).send(errors);
+        }
+
+        const isConfirmed = await this.authService.resendConfirmationCode(
+            email
+        );
+
+        if (!isConfirmed) {
+            res.status(400).send(
+                setErrors([{ field: 'code', message: 'Something error' }])
+            );
+            return;
+        }
+
+        res.sendStatus(204);
+    }
 }

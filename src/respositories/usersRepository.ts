@@ -97,4 +97,25 @@ export class UsersRepository {
 
         return result.modifiedCount === 1;
     }
+
+    async updateConfirmationCode({
+        id,
+        code,
+        expirationDate,
+    }: {
+        id: string;
+        code: string;
+        expirationDate: Date;
+    }) {
+        return UserModel.findOneAndUpdate(
+            { 'accountData.id': id },
+            {
+                $set: {
+                    'emailConfirmation.confirmationCode': code,
+                    'emailConfirmation.expirationDate': expirationDate,
+                },
+            },
+            { returnDocument: 'after' }
+        );
+    }
 }

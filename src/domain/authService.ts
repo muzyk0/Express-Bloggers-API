@@ -2,7 +2,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN_SECRET } from '../constants';
 import { UsersRepository } from '../respositories/usersRepository';
-import { isAfter } from 'date-fns';
+import { addDays, isAfter } from 'date-fns';
+import { v4 } from 'uuid';
+import { emailTemplateManager } from './email-template-manager';
+import { EmailService } from './email-service';
 
 export interface UserAccessTokenPayload {
     userId: string;
@@ -15,7 +18,10 @@ export interface AuthData {
 }
 
 export class AuthService {
-    constructor(private usersRepository: UsersRepository) {}
+    constructor(
+        private usersRepository: UsersRepository,
+        private emailService: EmailService
+    ) {}
     createJWT(payload: UserAccessTokenPayload) {
         const token = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
             expiresIn: '1h',
@@ -104,5 +110,32 @@ export class AuthService {
         }
 
         return this.usersRepository.setUserIsConfirmed(user.accountData.id);
+    }
+    async resendConfirmationCode(email: string) {
+        let user = await this.usersRepository.getUserByEmail(email);
+
+        if (!user || user.emailConfirmation.isConfirmed) {
+            return null;
+        }
+
+        let updatedUser = await this.usersRepository.updateConfirmationCode({
+            id: user.accountData.id,
+            code: v4(),
+            expirationDate: addDays(new Date(), 1),
+        });
+
+        if (!updatedUser) {
+            return null;
+        }
+
+        let emailTemplate =
+            emailTemplateManager.getEmailConfirmationMessage(updatedUser);
+
+        await this.emailService.sendEmail(
+            updatedUser.accountData.email,
+            'Confirm your account ✔',
+            emailTemplate
+        );
+        return true;
     }
 }

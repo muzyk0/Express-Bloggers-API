@@ -19,4 +19,9 @@ authRoute
         '/registration-confirmation',
         checkLimitsMiddleware,
         ioc.authController.confirmAccount.bind(ioc.authController)
+    )
+    .post(
+        '/registration-email-resending',
+        checkLimitsMiddleware,
+        ioc.authController.resendConfirmationCode.bind(ioc.authController)
     );

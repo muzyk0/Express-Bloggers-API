@@ -30,7 +30,7 @@ const testingRepository = new TestingRepository();
 export const limitsRepository = new LimitsRepository();
 
 const emailService = new EmailService();
-const authService = new AuthService(usersRepository);
+const authService = new AuthService(usersRepository, emailService);
 const usersService = new UsersService(
     usersRepository,
     authService,

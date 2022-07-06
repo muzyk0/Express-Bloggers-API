@@ -82,7 +82,7 @@ export class UsersService {
 
             await this.emailService.sendEmail(
                 email,
-                'Confirm your account ✔',
+                `Thanks for registration ${createdUser.accountData.login}`,
                 emailTemplate
             );
         } catch (e) {

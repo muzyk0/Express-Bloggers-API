@@ -111,11 +111,11 @@ export class AuthService {
 
         return this.usersRepository.setUserIsConfirmed(user.accountData.id);
     }
-    async resendConfirmationCode(email: string) {
+    async resendConfirmationCode(email: string): Promise<boolean> {
         let user = await this.usersRepository.getUserByEmail(email);
 
         if (!user || user.emailConfirmation.isConfirmed) {
-            return null;
+            return false;
         }
 
         let updatedUser = await this.usersRepository.updateConfirmationCode({
@@ -125,7 +125,7 @@ export class AuthService {
         });
 
         if (!updatedUser) {
-            return null;
+            return false;
         }
 
         let emailTemplate =

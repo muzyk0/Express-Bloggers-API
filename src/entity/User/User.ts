@@ -1,6 +1,26 @@
 import { IsDate, IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
-import { ValidationErrors } from '../lib/ValidationErrors';
-import { Nullable } from '../types/genericTypes';
+import { ValidationErrors } from '../../lib/ValidationErrors';
+import { Nullable } from '../../types/genericTypes';
+
+export type UserAccountDBType = {
+    accountData: IUser;
+    loginAttempts: LoginAttemptType[];
+    emailConfirmation: EmailConfirmationType;
+};
+export type EmailConfirmationType = {
+    isConfirmed: boolean;
+    confirmationCode: string;
+    expirationDate: Date;
+    sentEmails: SentConfirmationEmailType[];
+};
+
+export type SentConfirmationEmailType = {
+    sentDate: Date;
+};
+export type LoginAttemptType = {
+    attemptDate: Date;
+    ip: string;
+};
 
 export interface IUser {
     id: string;
@@ -31,4 +51,9 @@ export class User extends ValidationErrors {
     @IsDate()
     @IsNotEmpty()
     createdAt: Nullable<Date> = null;
+}
+
+export class ValidationEmailConfirmationCode extends ValidationErrors {
+    @IsString()
+    code: Nullable<string> = null;
 }

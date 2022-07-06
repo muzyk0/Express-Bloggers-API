@@ -1,5 +1,5 @@
-import { UserAccountDBType } from '../types/types';
 import { BASE_URL } from '../constants';
+import { UserAccountDBType } from '../entity/User/User';
 
 export const emailTemplateManager = {
     getEmailConfirmationMessage(user: UserAccountDBType) {

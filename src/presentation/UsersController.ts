@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UsersService } from '../domain/usersService';
-import { User } from '../entity/User';
+import { User } from '../entity/User/User';
 import { Paginator } from '../lib/Paginator';
 
 export class UsersController {

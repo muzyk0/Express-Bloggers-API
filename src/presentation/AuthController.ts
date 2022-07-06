@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { User } from '../entity/User';
+import { User, ValidationEmailConfirmationCode } from '../entity/User/User';
 import { AuthService } from '../domain/authService';
+import { setErrors } from '../lib/ValidationErrors';
 
 export class AuthController {
     constructor(private authService: AuthService) {}
@@ -42,5 +43,33 @@ export class AuthController {
         res.status(200).send({
             token: token,
         });
+    }
+
+    async confirmAccount(
+        req: Request<{}, {}, { code: string }>,
+        res: Response
+    ) {
+        const { code } = req.body;
+
+        const validate = new ValidationEmailConfirmationCode();
+
+        validate.code = code;
+
+        const errors = await ValidationEmailConfirmationCode.validate(validate);
+
+        if (errors) {
+            res.status(400).send(errors);
+        }
+
+        const isConfirmed = await this.authService.confirmAccount(code);
+
+        if (!isConfirmed) {
+            res.status(400).send(
+                setErrors([{ field: 'code', message: 'Something error' }])
+            );
+            return;
+        }
+
+        res.sendStatus(204);
     }
 }

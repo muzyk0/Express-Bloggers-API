@@ -2,7 +2,7 @@ import request from 'supertest';
 import { app } from '../..';
 
 import { mongoDBClient } from '../../respositories/db';
-import { IUser } from '../../entity/User';
+import { IUser } from '../../entity/User/User';
 
 describe('Test the bloggers', () => {
     let testUser: IUser;

@@ -14,4 +14,9 @@ authRoute
         '/registration',
         checkLimitsMiddleware,
         ioc.usersController.createNewUser.bind(ioc.usersController)
+    )
+    .post(
+        '/registration-confirmation',
+        checkLimitsMiddleware,
+        ioc.authController.confirmAccount.bind(ioc.authController)
     );

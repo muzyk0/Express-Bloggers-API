@@ -1,8 +1,8 @@
-import { IUser, UserDTO } from '../entity/User';
+import { IUser, UserAccountDBType, UserDTO } from '../entity/User/User';
 import { EntityManager } from '../lib/entityManager';
 import { PaginatorOptions, ResponseDataWithPaginator } from '../lib/Paginator';
 import { db } from './db';
-import { UserAccountDBType } from '../types/types';
+import { UserModel } from '../entity/User/UserModel';
 
 const usersCollection = db.collection<UserAccountDBType>('users');
 
@@ -77,5 +77,24 @@ export class UsersRepository {
             id,
             softRemove: options?.softRemove,
         });
+    }
+
+    async getUserByConfirmationCode(code: string) {
+        return UserModel.findOne({
+            'emailConfirmation.confirmationCode': code,
+        });
+    }
+
+    async setUserIsConfirmed(id: string): Promise<boolean> {
+        const result = await UserModel.updateOne(
+            { id },
+            {
+                $set: {
+                    'emailConfirmation.isConfirmed': true,
+                },
+            }
+        );
+
+        return result.modifiedCount === 1;
     }
 }

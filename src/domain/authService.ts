@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN_SECRET } from '../constants';
 import { UsersRepository } from '../respositories/usersRepository';
+import { isAfter } from 'date-fns';
 
 export interface UserAccessTokenPayload {
     userId: string;
@@ -82,5 +83,26 @@ export class AuthService {
     }
     async generateHashPassword(password: string) {
         return bcrypt.hash(password, 10);
+    }
+    async confirmAccount(code: string): Promise<boolean> {
+        const user = await this.usersRepository.getUserByConfirmationCode(code);
+        if (!user || user.emailConfirmation.isConfirmed) {
+            return false;
+        }
+
+        const isExpired = isAfter(
+            new Date(),
+            user.emailConfirmation.expirationDate
+        );
+
+        if (isExpired) {
+            return false;
+        }
+
+        if (code !== user.emailConfirmation.confirmationCode) {
+            return false;
+        }
+
+        return this.usersRepository.setUserIsConfirmed(user.accountData.id);
     }
 }

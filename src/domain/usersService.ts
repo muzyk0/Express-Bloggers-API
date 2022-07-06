@@ -1,7 +1,11 @@
-import { IUser, UserDTO, UserInput } from '../entity/User';
+import {
+    IUser,
+    UserAccountDBType,
+    UserDTO,
+    UserInput,
+} from '../entity/User/User';
 import { PaginatorOptions } from '../lib/Paginator';
 import { UsersRepository } from '../respositories/usersRepository';
-import { UserAccountDBType } from '../types/types';
 import { v4 } from 'uuid';
 import { addDays } from 'date-fns';
 import { emailTemplateManager } from './email-template-manager';

@@ -26,8 +26,8 @@ export const isAuth = async (
     }
 
     req.ctx = {
-        login: user.login,
-        userId: user.id,
+        login: user.accountData.login,
+        userId: user.accountData.id,
     };
 
     next();

@@ -47,7 +47,7 @@ export class UsersRepository {
     }
 
     async getUserById(id: string) {
-        return this.m.findOne<IUser>('users', { 'accountData.id': id });
+        return UserModel.findOne({ 'accountData.id': id });
     }
 
     async createUser(user: UserAccountDBType) {

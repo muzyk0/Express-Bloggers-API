@@ -95,7 +95,7 @@ export class AuthController {
 
         if (!isConfirmed) {
             res.status(400).send(
-                setErrors([{ field: 'code', message: 'Something error' }])
+                setErrors([{ field: 'email', message: 'Something error' }])
             );
             return;
         }
